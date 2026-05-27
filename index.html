@@ -62,14 +62,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.2rem;
+    gap: 0.75rem;
   }
 
   header {
     text-align: center;
   }
   .header-emoji {
-    font-size: 3rem;
+    font-size: 2.2rem;
     display: block;
     animation: spin-slow 6s linear infinite;
   }
@@ -81,10 +81,10 @@
   }
   header h1 {
     font-family: 'Noto Serif KR', serif;
-    font-size: 1.6rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: var(--text);
-    margin-top: 0.4rem;
+    margin-top: 0.2rem;
     letter-spacing: -0.02em;
   }
   header p {
@@ -108,7 +108,7 @@
     display: flex;
     gap: 0.25rem;
     justify-content: center;
-    margin: 0.4rem 0 0.1rem;
+    margin: 0.2rem 0 0.1rem;
   }
   .star { font-size: 1.1rem; }
 
@@ -117,7 +117,7 @@
     background: var(--card-bg);
     border-radius: 24px;
     border: 2px solid var(--blush);
-    padding: 1.8rem 1.6rem;
+    padding: 1.2rem 1.4rem;
     width: 100%;
     box-shadow: 0 4px 24px rgba(200,150,170,0.12);
     position: relative;
@@ -138,6 +138,8 @@
   }
 
   .fortune-category {
+    justify-content: center;
+    text-align: center;
     font-size: 0.72rem;
     font-weight: 400;
     letter-spacing: 0.08em;
@@ -149,14 +151,16 @@
     gap: 0.4rem;
   }
   .fortune-title {
+    text-align: center;
     font-family: 'Noto Serif KR', serif;
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 0.9rem;
+    margin-bottom: 0.5rem;
     line-height: 1.5;
   }
   .fortune-body {
+    text-align: center;
     font-size: 0.95rem;
     color: var(--text-light);
     line-height: 1.8;
@@ -170,10 +174,11 @@
     width: 100%;
   }
   .mini-card {
+    text-align: center;
     background: var(--card-bg);
     border: 1.5px solid var(--blush);
     border-radius: 16px;
-    padding: 1rem;
+    padding: 0.75rem;
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
   .mini-card.hidden {
@@ -181,6 +186,7 @@
     transform: translateY(6px);
   }
   .mini-card-label {
+    justify-content: center;
     font-size: 0.7rem;
     color: var(--text-light);
     margin-bottom: 0.35rem;
@@ -189,6 +195,7 @@
     gap: 0.3rem;
   }
   .mini-card-value {
+    text-align: center;
     font-family: 'Noto Serif KR', serif;
     font-size: 1rem;
     font-weight: 700;
@@ -212,7 +219,7 @@
     color: white;
     border: none;
     border-radius: 999px;
-    padding: 0.85rem 2.2rem;
+    padding: 0.7rem 2rem;
     font-family: 'Gowun Dodum', serif;
     font-size: 1rem;
     cursor: pointer;
@@ -257,7 +264,7 @@
 
   <header>
     <span class="header-emoji" id="mainEmoji">🔮</span>
-    <h1>오늘의 운세</h1>
+    <h1>Kelly님의 오늘의 운세</h1>
     <p id="todayDate"></p>
   </header>
 
@@ -447,9 +454,10 @@ function buildBg() {
   }
 }
 
-function pickFortune() {
-  const seed = currentSeed + rerollCount * 997;
-  const rng = seededRandom(seed);
+function pickFortune(useRandom) {
+  const rng = useRandom
+    ? () => Math.random()
+    : (() => { const r = seededRandom(currentSeed); return () => r(); })();
   const f = fortunes[Math.floor(rng() * fortunes.length)];
   const lunch = lunches[Math.floor(rng() * lunches.length)];
   const num = numbers[Math.floor(rng() * numbers.length)];
@@ -470,8 +478,8 @@ function setDate() {
   document.getElementById('lunarDate').textContent = '✨ 오늘의 운세 카드';
 }
 
-function showFortune(animate) {
-  const { f, lunch, num, col, time } = pickFortune();
+function showFortune(animate, useRandom) {
+  const { f, lunch, num, col, time } = pickFortune(useRandom);
   const mainCard = document.getElementById('mainCard');
   const mcs = ['mc1','mc2','mc3','mc4'].map(id => document.getElementById(id));
 
@@ -502,8 +510,7 @@ function showFortune(animate) {
 }
 
 function reroll() {
-  rerollCount++;
-  showFortune(true);
+  showFortune(true, true);
   const btn = document.getElementById('rerollBtn');
   btn.textContent = '🎲 다시 뽑기';
 }
