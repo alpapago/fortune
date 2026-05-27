@@ -10,21 +10,24 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --cream: #FFF8F0;
-    --blush: #FFD6C8;
-    --rose: #FF8FA3;
-    --violet: #C9B8FF;
-    --sky: #B8E0FF;
-    --mint: #B8F0E0;
-    --gold: #FFD966;
-    --text: #3D2B4A;
-    --text-light: #7A6085;
-    --card-bg: #FFFCF8;
+    --bg: #EEF6FB;
+    --lilac: #C8A8E9;
+    --lilac-light: #EDE0F8;
+    --lilac-mid: #B48FD8;
+    --aqua: #7DD4E8;
+    --aqua-light: #D6F0F8;
+    --seafoam: #8FD8C8;
+    --sky: #B8E8F8;
+    --white: #FAFEFF;
+    --text: #2A3A5C;
+    --text-light: #6A7FA8;
+    --gold: #F5D87A;
+    --card-bg: #FAFEFF;
   }
 
   body {
     font-family: 'Gowun Dodum', serif;
-    background: var(--cream);
+    background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     display: flex;
@@ -36,6 +39,17 @@
     position: relative;
   }
 
+  /* 배경 물결 */
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 38vh;
+    background: linear-gradient(180deg, transparent, rgba(125,212,232,0.18));
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .bg-deco {
     position: fixed;
     inset: 0;
@@ -45,13 +59,12 @@
   }
   .bg-deco span {
     position: absolute;
-    font-size: 1.4rem;
-    opacity: 0.12;
+    opacity: 0.13;
     animation: float-deco 8s ease-in-out infinite;
   }
   @keyframes float-deco {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-12px) rotate(10deg); }
+    50% { transform: translateY(-14px) rotate(12deg); }
   }
 
   .wrap {
@@ -65,61 +78,65 @@
     gap: 0.75rem;
   }
 
-  header {
-    text-align: center;
-  }
+  header { text-align: center; }
+
   .header-emoji {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     display: block;
-    animation: spin-slow 6s linear infinite;
+    animation: spin-slow 6s ease-in-out infinite;
   }
   @keyframes spin-slow {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(8deg); }
-    75% { transform: rotate(-8deg); }
-    100% { transform: rotate(0deg); }
+    0%, 100% { transform: rotate(-6deg) scale(1); }
+    50% { transform: rotate(6deg) scale(1.08); }
   }
+
   header h1 {
     font-family: 'Noto Serif KR', serif;
     font-size: 1.35rem;
     font-weight: 700;
     color: var(--text);
-    margin-top: 0.2rem;
+    margin-top: 0.25rem;
     letter-spacing: -0.02em;
   }
   header p {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-light);
-    margin-top: 0.3rem;
+    margin-top: 0.25rem;
   }
 
   .date-badge {
-    background: var(--violet);
-    color: #3D2B4A;
+    background: linear-gradient(135deg, var(--lilac), var(--aqua));
+    color: #fff;
     border-radius: 999px;
-    padding: 0.35rem 1.1rem;
-    font-size: 0.8rem;
+    padding: 0.35rem 1.2rem;
+    font-size: 0.78rem;
     font-family: 'Gowun Dodum', serif;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
+  }
+
+  /* 탄생화 배너 */
+  .lilac-header-svg {
+    width: 100%;
+    margin-bottom: -0.3rem;
   }
 
   /* STAR rating */
   .star-row {
     display: flex;
-    gap: 0.25rem;
+    gap: 0.22rem;
     justify-content: center;
     margin: 0.2rem 0 0.1rem;
   }
-  .star { font-size: 1.1rem; }
+  .star { font-size: 1.05rem; }
 
   /* Fortune card */
   .card {
     background: var(--card-bg);
-    border-radius: 24px;
-    border: 2px solid var(--blush);
+    border-radius: 22px;
+    border: 1.5px solid var(--aqua);
     padding: 1.2rem 1.4rem;
     width: 100%;
-    box-shadow: 0 4px 24px rgba(200,150,170,0.12);
+    box-shadow: 0 4px 28px rgba(125,212,232,0.15);
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -134,18 +151,17 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--rose), var(--violet), var(--gold));
+    background: linear-gradient(90deg, var(--lilac), var(--aqua), var(--seafoam));
   }
 
   .fortune-category {
     justify-content: center;
     text-align: center;
     font-size: 0.72rem;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    color: var(--rose);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.07em;
+    color: var(--aqua);
+    filter: brightness(0.75);
+    margin-bottom: 0.45rem;
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -153,30 +169,30 @@
   .fortune-title {
     text-align: center;
     font-family: 'Noto Serif KR', serif;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.45rem;
     line-height: 1.5;
   }
   .fortune-body {
     text-align: center;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     color: var(--text-light);
-    line-height: 1.8;
+    line-height: 1.85;
   }
 
   /* Mini fortune items */
   .mini-cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.65rem;
     width: 100%;
   }
   .mini-card {
     text-align: center;
     background: var(--card-bg);
-    border: 1.5px solid var(--blush);
+    border: 1.5px solid var(--sky);
     border-radius: 16px;
     padding: 0.75rem;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -187,35 +203,34 @@
   }
   .mini-card-label {
     justify-content: center;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: var(--text-light);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.3rem;
     display: flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.25rem;
   }
   .mini-card-value {
     text-align: center;
     font-family: 'Noto Serif KR', serif;
-    font-size: 1rem;
+    font-size: 0.97rem;
     font-weight: 700;
     color: var(--text);
   }
 
-  /* Lucky color swatch */
   .color-dot {
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%;
     vertical-align: -2px;
-    margin-left: 6px;
-    border: 1.5px solid rgba(0,0,0,0.1);
+    margin-left: 5px;
+    border: 1.5px solid rgba(0,0,0,0.08);
   }
 
   /* CTA button */
   .btn {
-    background: var(--rose);
+    background: linear-gradient(135deg, var(--lilac-mid), var(--aqua));
     color: white;
     border: none;
     border-radius: 999px;
@@ -223,35 +238,34 @@
     font-family: 'Gowun Dodum', serif;
     font-size: 1rem;
     cursor: pointer;
-    transition: transform 0.15s, background 0.15s;
-    box-shadow: 0 4px 16px rgba(255,143,163,0.35);
+    transition: transform 0.15s, filter 0.15s;
+    box-shadow: 0 4px 18px rgba(180,143,216,0.32);
     width: 100%;
     max-width: 280px;
   }
-  .btn:hover { background: #ff7090; transform: translateY(-2px); }
+  .btn:hover { filter: brightness(1.07); transform: translateY(-2px); }
   .btn:active { transform: scale(0.97); }
 
   .footer-note {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--text-light);
     text-align: center;
-    opacity: 0.7;
+    opacity: 0.65;
   }
 
-  /* NFC chip icon */
   .nfc-chip {
-    font-size: 0.75rem;
-    background: var(--mint);
-    color: #2A6050;
+    font-size: 0.74rem;
+    background: var(--aqua-light);
+    color: #3A7A8A;
     border-radius: 999px;
-    padding: 0.25rem 0.75rem;
-    margin-bottom: 0.3rem;
+    padding: 0.25rem 0.8rem;
+    margin-bottom: 0.2rem;
     display: inline-block;
   }
 
   @media (max-width: 360px) {
-    header h1 { font-size: 1.35rem; }
-    .mini-cards { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    header h1 { font-size: 1.2rem; }
+    .mini-cards { gap: 0.5rem; }
   }
 </style>
 </head>
@@ -260,16 +274,118 @@
 <div class="bg-deco" id="bgDeco"></div>
 
 <div class="wrap">
-  <div class="nfc-chip">✦ NFC 태그됨</div>
+  <div class="nfc-chip">🫧 NFC 태그됨</div>
 
   <header>
-    <span class="header-emoji" id="mainEmoji">🔮</span>
-    <h1>Kelly님의 오늘의 운세</h1>
-    <p id="todayDate"></p>
+    <div class="lilac-header-svg">
+      <svg viewBox="0 0 420 160" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block; overflow:visible;">
+        <defs>
+          <linearGradient id="lsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8FBF78"/><stop offset="100%" stop-color="#4E7A40"/></linearGradient>
+          <linearGradient id="lpG1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E8D0F8"/><stop offset="100%" stop-color="#B48CD6"/></linearGradient>
+          <linearGradient id="lpG2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C8A8E9"/><stop offset="100%" stop-color="#8B5CC8"/></linearGradient>
+          <linearGradient id="lpG3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#D4B8F0"/><stop offset="100%" stop-color="#9B70D0"/></linearGradient>
+          <linearGradient id="llG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#B0D8A0"/><stop offset="100%" stop-color="#5A9048"/></linearGradient>
+          <linearGradient id="llG2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#90C880"/><stop offset="100%" stop-color="#3E7830"/></linearGradient>
+        </defs>
+
+        <!-- ===== LEFT BRANCH ===== -->
+        <!-- main stem -->
+        <path d="M72 158 C70 140 68 118 65 95 C62 72 58 52 54 30" stroke="url(#lsG)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- sub stems -->
+        <path d="M65 95 C58 85 50 72 42 58" stroke="url(#lsG)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M65 95 C72 85 80 72 88 56" stroke="url(#lsG)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M54 30 C48 22 44 14 40 6" stroke="url(#lsG)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M54 30 C60 22 65 15 66 7" stroke="url(#lsG)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- big leaf left -->
+        <path d="M65 112 C48 104 34 106 28 118 C40 118 54 116 65 112Z" fill="url(#llG)" opacity="0.9"/>
+        <path d="M65 112 C48 104 34 106 28 118" stroke="#4E7A40" stroke-width="0.8" fill="none"/>
+        <path d="M65 112 C55 108 42 108 36 114" stroke="#5A9048" stroke-width="0.5" fill="none" opacity="0.6"/>
+        <!-- big leaf right -->
+        <path d="M72 108 C88 100 104 102 110 114 C98 114 84 112 72 108Z" fill="url(#llG2)" opacity="0.85"/>
+        <path d="M72 108 C88 100 104 102 110 114" stroke="#3E7830" stroke-width="0.8" fill="none"/>
+        <!-- small leaf on sub -->
+        <path d="M55 72 C44 66 36 68 32 76 C40 76 48 74 55 72Z" fill="url(#llG)" opacity="0.8"/>
+        <path d="M75 68 C86 62 94 64 96 72 C88 72 81 70 75 68Z" fill="url(#llG2)" opacity="0.75"/>
+
+        <!-- flower cluster: center top -->
+        <!-- each tiny lilac flower = 4 rounded petals + center -->
+        <!-- cluster top-center (biggest, densest) -->
+        <!-- row 1 tip -->
+        <g opacity="0.7"><ellipse cx="54" cy="8" rx="5" ry="3.5" fill="url(#lpG1)" transform="rotate(0 54 8)"/><ellipse cx="54" cy="8" rx="5" ry="3.5" fill="url(#lpG1)" transform="rotate(90 54 8)"/><ellipse cx="54" cy="8" rx="5" ry="3.5" fill="url(#lpG1)" transform="rotate(45 54 8)"/><ellipse cx="54" cy="8" rx="5" ry="3.5" fill="url(#lpG1)" transform="rotate(135 54 8)"/><circle cx="54" cy="8" r="2.5" fill="#F2E8FF"/></g>
+        <g opacity="0.75"><ellipse cx="66" cy="9" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(20 66 9)"/><ellipse cx="66" cy="9" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(110 66 9)"/><ellipse cx="66" cy="9" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(200 66 9)"/><ellipse cx="66" cy="9" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(290 66 9)"/><circle cx="66" cy="9" r="2.2" fill="#EEE0FF"/></g>
+        <!-- row 2 -->
+        <g opacity="0.85"><ellipse cx="46" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(0 46 18)"/><ellipse cx="46" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(90 46 18)"/><ellipse cx="46" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(45 46 18)"/><ellipse cx="46" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(135 46 18)"/><circle cx="46" cy="18" r="2.5" fill="#F5EEFF"/></g>
+        <g opacity="0.9"><ellipse cx="57" cy="20" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(15 57 20)"/><ellipse cx="57" cy="20" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(105 57 20)"/><ellipse cx="57" cy="20" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(195 57 20)"/><ellipse cx="57" cy="20" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(285 57 20)"/><circle cx="57" cy="20" r="2.8" fill="#F2E8FF"/></g>
+        <g opacity="0.82"><ellipse cx="68" cy="19" rx="5" ry="3.5" fill="url(#lpG2)" transform="rotate(-10 68 19)"/><ellipse cx="68" cy="19" rx="5" ry="3.5" fill="url(#lpG2)" transform="rotate(80 68 19)"/><ellipse cx="68" cy="19" rx="5" ry="3.5" fill="url(#lpG2)" transform="rotate(170 68 19)"/><ellipse cx="68" cy="19" rx="5" ry="3.5" fill="url(#lpG2)" transform="rotate(260 68 19)"/><circle cx="68" cy="19" r="2.2" fill="#EEE0FF"/></g>
+        <!-- row 3 -->
+        <g opacity="0.92"><ellipse cx="42" cy="30" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(0 42 30)"/><ellipse cx="42" cy="30" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(90 42 30)"/><ellipse cx="42" cy="30" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(45 42 30)"/><ellipse cx="42" cy="30" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(135 42 30)"/><circle cx="42" cy="30" r="2.8" fill="#F5EEFF"/></g>
+        <g opacity="0.95"><ellipse cx="54" cy="33" rx="6" ry="4.2" fill="url(#lpG3)" transform="rotate(10 54 33)"/><ellipse cx="54" cy="33" rx="6" ry="4.2" fill="url(#lpG3)" transform="rotate(100 54 33)"/><ellipse cx="54" cy="33" rx="6" ry="4.2" fill="url(#lpG3)" transform="rotate(190 54 33)"/><ellipse cx="54" cy="33" rx="6" ry="4.2" fill="url(#lpG3)" transform="rotate(280 54 33)"/><circle cx="54" cy="33" r="3" fill="#F0E4FF"/></g>
+        <g opacity="0.88"><ellipse cx="66" cy="31" rx="5.5" ry="3.8" fill="url(#lpG2)" transform="rotate(-5 66 31)"/><ellipse cx="66" cy="31" rx="5.5" ry="3.8" fill="url(#lpG2)" transform="rotate(85 66 31)"/><ellipse cx="66" cy="31" rx="5.5" ry="3.8" fill="url(#lpG2)" transform="rotate(175 66 31)"/><ellipse cx="66" cy="31" rx="5.5" ry="3.8" fill="url(#lpG2)" transform="rotate(265 66 31)"/><circle cx="66" cy="31" r="2.5" fill="#EEE0FF"/></g>
+        <g opacity="0.72"><ellipse cx="76" cy="28" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(20 76 28)"/><ellipse cx="76" cy="28" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(110 76 28)"/><ellipse cx="76" cy="28" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(200 76 28)"/><ellipse cx="76" cy="28" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(290 76 28)"/><circle cx="76" cy="28" r="2" fill="#F5EEFF"/></g>
+        <!-- row 4 widest -->
+        <g opacity="0.88"><ellipse cx="40" cy="44" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(0 40 44)"/><ellipse cx="40" cy="44" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(90 40 44)"/><ellipse cx="40" cy="44" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(45 40 44)"/><ellipse cx="40" cy="44" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(135 40 44)"/><circle cx="40" cy="44" r="2.8" fill="#EEE0FF"/></g>
+        <g opacity="0.95"><ellipse cx="52" cy="47" rx="6" ry="4.5" fill="url(#lpG1)" transform="rotate(5 52 47)"/><ellipse cx="52" cy="47" rx="6" ry="4.5" fill="url(#lpG1)" transform="rotate(95 52 47)"/><ellipse cx="52" cy="47" rx="6" ry="4.5" fill="url(#lpG1)" transform="rotate(185 52 47)"/><ellipse cx="52" cy="47" rx="6" ry="4.5" fill="url(#lpG1)" transform="rotate(275 52 47)"/><circle cx="52" cy="47" r="3.2" fill="#F2E8FF"/></g>
+        <g opacity="0.92"><ellipse cx="64" cy="45" rx="5.8" ry="4.2" fill="url(#lpG3)" transform="rotate(-8 64 45)"/><ellipse cx="64" cy="45" rx="5.8" ry="4.2" fill="url(#lpG3)" transform="rotate(82 64 45)"/><ellipse cx="64" cy="45" rx="5.8" ry="4.2" fill="url(#lpG3)" transform="rotate(172 64 45)"/><ellipse cx="64" cy="45" rx="5.8" ry="4.2" fill="url(#lpG3)" transform="rotate(262 64 45)"/><circle cx="64" cy="45" r="3" fill="#F0E4FF"/></g>
+        <g opacity="0.82"><ellipse cx="76" cy="42" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(15 76 42)"/><ellipse cx="76" cy="42" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(105 76 42)"/><ellipse cx="76" cy="42" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(195 76 42)"/><ellipse cx="76" cy="42" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(285 76 42)"/><circle cx="76" cy="42" r="2.5" fill="#EEE0FF"/></g>
+        <g opacity="0.72"><ellipse cx="87" cy="44" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(-5 87 44)"/><ellipse cx="87" cy="44" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(85 87 44)"/><ellipse cx="87" cy="44" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(175 87 44)"/><ellipse cx="87" cy="44" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(265 87 44)"/><circle cx="87" cy="44" r="2.2" fill="#F5EEFF"/></g>
+
+        <!-- left sub-branch cluster -->
+        <g opacity="0.88"><ellipse cx="42" cy="58" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(0 42 58)"/><ellipse cx="42" cy="58" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(90 42 58)"/><ellipse cx="42" cy="58" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(45 42 58)"/><ellipse cx="42" cy="58" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(135 42 58)"/><circle cx="42" cy="58" r="2.8" fill="#F0E4FF"/></g>
+        <g opacity="0.78"><ellipse cx="32" cy="54" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(20 32 54)"/><ellipse cx="32" cy="54" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(110 32 54)"/><ellipse cx="32" cy="54" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(200 32 54)"/><ellipse cx="32" cy="54" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(290 32 54)"/><circle cx="32" cy="54" r="2" fill="#F5EEFF"/></g>
+
+        <!-- right sub-branch cluster -->
+        <g opacity="0.85"><ellipse cx="88" cy="56" rx="5" ry="3.8" fill="url(#lpG2)" transform="rotate(0 88 56)"/><ellipse cx="88" cy="56" rx="5" ry="3.8" fill="url(#lpG2)" transform="rotate(90 88 56)"/><ellipse cx="88" cy="56" rx="5" ry="3.8" fill="url(#lpG2)" transform="rotate(45 88 56)"/><ellipse cx="88" cy="56" rx="5" ry="3.8" fill="url(#lpG2)" transform="rotate(135 88 56)"/><circle cx="88" cy="56" r="2.8" fill="#EEE0FF"/></g>
+        <g opacity="0.72"><ellipse cx="98" cy="52" rx="4.2" ry="3" fill="url(#lpG3)" transform="rotate(-10 98 52)"/><ellipse cx="98" cy="52" rx="4.2" ry="3" fill="url(#lpG3)" transform="rotate(80 98 52)"/><ellipse cx="98" cy="52" rx="4.2" ry="3" fill="url(#lpG3)" transform="rotate(170 98 52)"/><ellipse cx="98" cy="52" rx="4.2" ry="3" fill="url(#lpG3)" transform="rotate(260 98 52)"/><circle cx="98" cy="52" r="1.8" fill="#F5EEFF"/></g>
+
+        <!-- tiny buds -->
+        <ellipse cx="38" cy="10" rx="3" ry="5" fill="#D4B8F0" transform="rotate(-20 38 10)" opacity="0.65"/>
+        <ellipse cx="74" cy="15" rx="2.5" ry="4.5" fill="#C8A8E9" transform="rotate(15 74 15)" opacity="0.55"/>
+        <ellipse cx="30" cy="46" rx="2" ry="4" fill="#DFC4F5" transform="rotate(-30 30 46)" opacity="0.5"/>
+
+        <!-- ===== RIGHT BRANCH (smaller, leaning right) ===== -->
+        <path d="M348 158 C350 138 354 115 358 92 C362 68 366 46 370 22" stroke="url(#lsG)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        <path d="M358 92 C350 80 342 66 336 52" stroke="url(#lsG)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M358 92 C366 80 376 66 384 52" stroke="url(#lsG)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M370 22 C364 14 360 8 358 4" stroke="url(#lsG)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M370 22 C376 14 380 8 382 4" stroke="url(#lsG)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- right leaves -->
+        <path d="M354 108 C338 100 322 102 316 114 C328 114 342 112 354 108Z" fill="url(#llG)" opacity="0.88"/>
+        <path d="M354 108 C338 100 322 102 316 114" stroke="#4E7A40" stroke-width="0.8" fill="none"/>
+        <path d="M362 105 C378 97 394 99 400 111 C388 111 374 109 362 105Z" fill="url(#llG2)" opacity="0.82"/>
+        <path d="M340 72 C328 66 318 68 314 76 C322 76 332 74 340 72Z" fill="url(#llG)" opacity="0.76"/>
+        <path d="M376 68 C388 62 398 64 400 72 C392 72 383 70 376 68Z" fill="url(#llG2)" opacity="0.72"/>
+
+        <!-- right flower clusters -->
+        <g opacity="0.72"><ellipse cx="370" cy="6" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(0 370 6)"/><ellipse cx="370" cy="6" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(90 370 6)"/><ellipse cx="370" cy="6" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(45 370 6)"/><ellipse cx="370" cy="6" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(135 370 6)"/><circle cx="370" cy="6" r="2.2" fill="#EEE0FF"/></g>
+        <g opacity="0.68"><ellipse cx="358" cy="6" rx="4" ry="3" fill="url(#lpG1)" transform="rotate(15 358 6)"/><ellipse cx="358" cy="6" rx="4" ry="3" fill="url(#lpG1)" transform="rotate(105 358 6)"/><ellipse cx="358" cy="6" rx="4" ry="3" fill="url(#lpG1)" transform="rotate(195 358 6)"/><ellipse cx="358" cy="6" rx="4" ry="3" fill="url(#lpG1)" transform="rotate(285 358 6)"/><circle cx="358" cy="6" r="2" fill="#F5EEFF"/></g>
+        <g opacity="0.82"><ellipse cx="362" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(0 362 18)"/><ellipse cx="362" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(90 362 18)"/><ellipse cx="362" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(45 362 18)"/><ellipse cx="362" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(135 362 18)"/><circle cx="362" cy="18" r="2.5" fill="#F0E4FF"/></g>
+        <g opacity="0.78"><ellipse cx="374" cy="17" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(-10 374 17)"/><ellipse cx="374" cy="17" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(80 374 17)"/><ellipse cx="374" cy="17" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(170 374 17)"/><ellipse cx="374" cy="17" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(260 374 17)"/><circle cx="374" cy="17" r="2.3" fill="#F2E8FF"/></g>
+        <g opacity="0.88"><ellipse cx="358" cy="30" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(8 358 30)"/><ellipse cx="358" cy="30" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(98 358 30)"/><ellipse cx="358" cy="30" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(188 358 30)"/><ellipse cx="358" cy="30" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(278 358 30)"/><circle cx="358" cy="30" r="2.8" fill="#EEE0FF"/></g>
+        <g opacity="0.84"><ellipse cx="370" cy="29" rx="5.2" ry="3.8" fill="url(#lpG3)" transform="rotate(-5 370 29)"/><ellipse cx="370" cy="29" rx="5.2" ry="3.8" fill="url(#lpG3)" transform="rotate(85 370 29)"/><ellipse cx="370" cy="29" rx="5.2" ry="3.8" fill="url(#lpG3)" transform="rotate(175 370 29)"/><ellipse cx="370" cy="29" rx="5.2" ry="3.8" fill="url(#lpG3)" transform="rotate(265 370 29)"/><circle cx="370" cy="29" r="2.6" fill="#F0E4FF"/></g>
+        <g opacity="0.78"><ellipse cx="382" cy="26" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(20 382 26)"/><ellipse cx="382" cy="26" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(110 382 26)"/><ellipse cx="382" cy="26" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(200 382 26)"/><ellipse cx="382" cy="26" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(290 382 26)"/><circle cx="382" cy="26" r="2.2" fill="#F5EEFF"/></g>
+        <g opacity="0.9"><ellipse cx="354" cy="43" rx="5.8" ry="4.2" fill="url(#lpG1)" transform="rotate(0 354 43)"/><ellipse cx="354" cy="43" rx="5.8" ry="4.2" fill="url(#lpG1)" transform="rotate(90 354 43)"/><ellipse cx="354" cy="43" rx="5.8" ry="4.2" fill="url(#lpG1)" transform="rotate(45 354 43)"/><ellipse cx="354" cy="43" rx="5.8" ry="4.2" fill="url(#lpG1)" transform="rotate(135 354 43)"/><circle cx="354" cy="43" r="3" fill="#F2E8FF"/></g>
+        <g opacity="0.92"><ellipse cx="366" cy="44" rx="6" ry="4.5" fill="url(#lpG3)" transform="rotate(10 366 44)"/><ellipse cx="366" cy="44" rx="6" ry="4.5" fill="url(#lpG3)" transform="rotate(100 366 44)"/><ellipse cx="366" cy="44" rx="6" ry="4.5" fill="url(#lpG3)" transform="rotate(190 366 44)"/><ellipse cx="366" cy="44" rx="6" ry="4.5" fill="url(#lpG3)" transform="rotate(280 366 44)"/><circle cx="366" cy="44" r="3.2" fill="#F0E4FF"/></g>
+        <g opacity="0.85"><ellipse cx="378" cy="42" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(-8 378 42)"/><ellipse cx="378" cy="42" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(82 378 42)"/><ellipse cx="378" cy="42" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(172 378 42)"/><ellipse cx="378" cy="42" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(262 378 42)"/><circle cx="378" cy="42" r="2.8" fill="#EEE0FF"/></g>
+        <g opacity="0.75"><ellipse cx="389" cy="40" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(15 389 40)"/><ellipse cx="389" cy="40" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(105 389 40)"/><ellipse cx="389" cy="40" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(195 389 40)"/><ellipse cx="389" cy="40" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(285 389 40)"/><circle cx="389" cy="40" r="2.4" fill="#F5EEFF"/></g>
+        <!-- sub clusters right -->
+        <g opacity="0.82"><ellipse cx="336" cy="52" rx="5" ry="3.6" fill="url(#lpG3)" transform="rotate(0 336 52)"/><ellipse cx="336" cy="52" rx="5" ry="3.6" fill="url(#lpG3)" transform="rotate(90 336 52)"/><ellipse cx="336" cy="52" rx="5" ry="3.6" fill="url(#lpG3)" transform="rotate(45 336 52)"/><ellipse cx="336" cy="52" rx="5" ry="3.6" fill="url(#lpG3)" transform="rotate(135 336 52)"/><circle cx="336" cy="52" r="2.6" fill="#F0E4FF"/></g>
+        <g opacity="0.72"><ellipse cx="326" cy="48" rx="4.2" ry="3" fill="url(#lpG1)" transform="rotate(20 326 48)"/><ellipse cx="326" cy="48" rx="4.2" ry="3" fill="url(#lpG1)" transform="rotate(110 326 48)"/><ellipse cx="326" cy="48" rx="4.2" ry="3" fill="url(#lpG1)" transform="rotate(200 326 48)"/><ellipse cx="326" cy="48" rx="4.2" ry="3" fill="url(#lpG1)" transform="rotate(290 326 48)"/><circle cx="326" cy="48" r="1.8" fill="#F5EEFF"/></g>
+        <g opacity="0.8"><ellipse cx="384" cy="52" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(-5 384 52)"/><ellipse cx="384" cy="52" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(85 384 52)"/><ellipse cx="384" cy="52" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(175 384 52)"/><ellipse cx="384" cy="52" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(265 384 52)"/><circle cx="384" cy="52" r="2.6" fill="#EEE0FF"/></g>
+        <!-- buds right -->
+        <ellipse cx="382" cy="12" rx="2.8" ry="5" fill="#D4B8F0" transform="rotate(15 382 12)" opacity="0.6"/>
+        <ellipse cx="348" cy="24" rx="2.2" ry="4" fill="#C8A8E9" transform="rotate(-20 348 24)" opacity="0.5"/>
+
+        <!-- title text centered -->
+        <text x="210" y="74" text-anchor="middle" font-family="'Noto Serif KR', serif" font-size="20" font-weight="700" fill="#3A2A5C">Kelly님의 오늘의 운세</text>
+        <text x="210" y="96" text-anchor="middle" font-family="'Gowun Dodum', serif" font-size="13" fill="#7A6A9C" id="svgDate"></text>
+      </svg>
+    </div>
+    <p id="todayDate" style="display:none;"></p>
   </header>
 
   <div class="date-badge" id="lunarDate">로딩 중...</div>
-
   <!-- Main fortune card -->
   <div class="card hidden" id="mainCard">
     <div class="fortune-category" id="fortuneCategory">🌟 오늘의 한마디</div>
@@ -299,7 +415,7 @@
   </div>
 
   <button class="btn" id="rerollBtn" onclick="reroll()">🎲 다시 뽑기</button>
-  <p class="footer-note">태그할 때마다 새로운 운세가 펼쳐져요 ✨</p>
+
 </div>
 
 <script>
@@ -422,7 +538,7 @@ const colors = [
 
 const times = ["오전 9시","오전 10시","오전 11시","정오 12시","오후 1시","오후 2시","오후 3시","오후 4시","오후 5시","오후 6시","오후 7시","오후 8시","오후 9시","오전 7시","오전 8시"];
 
-const bgDecos = ['✦','⋆','°','˚','*','✧','·','˙','⁎','✩','꼭','❋','◌'];
+const bgDecos = ['🌸','✦','⋆','˚','✧','·','🫧','💧','🌿','°','⁎','✩','❋','🐚'];
 
 function seededRandom(seed) {
   let s = seed;
@@ -473,8 +589,11 @@ function renderStars(n) {
 function setDate() {
   const d = new Date();
   const days = ['일','월','화','수','목','금','토'];
-  document.getElementById('todayDate').textContent =
-    `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]}요일)`;
+  const dateStr = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]}요일)`;
+  const el = document.getElementById('todayDate');
+  if (el) el.textContent = dateStr;
+  const svgDate = document.getElementById('svgDate');
+  if (svgDate) svgDate.textContent = dateStr;
   document.getElementById('lunarDate').textContent = '✨ 오늘의 운세 카드';
 }
 
