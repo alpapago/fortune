@@ -113,8 +113,8 @@
   .date-badge {
     background: linear-gradient(135deg, var(--lilac), var(--aqua));
     color: #fff; border-radius: 999px;
-    padding: 0.35rem 1.2rem; font-size: 0.78rem;
-    font-family: 'Gowun Dodum', serif; letter-spacing: 0.03em;
+    padding: 0.5rem 1.5rem; font-size: 1rem;
+    font-family: 'Noto Serif KR', serif; font-weight: 700; letter-spacing: 0.02em;
   }
 
   /* ── LOADING ── */
@@ -531,8 +531,7 @@
     </div>
   </div>
 
-  <button class="btn" id="rerollBtn" onclick="reroll()">🎲 오늘의 운세 다시 뽑기</button>
-  <button class="btn-sm" onclick="goSetup()">⚙ 설정 변경</button>
+  <button class="btn" id="rerollBtn" onclick="reroll()">⚙ 설정 변경</button>
 </div>
 
 <script>
@@ -549,11 +548,9 @@ const colors = [
   { name:"터콰이즈", hex:"#40E0D0" },
   { name:"로즈 골드", hex:"#F4A0A0" },
   { name:"세이지 그린", hex:"#9DC88D" },
-  { name:"버터 옐로우", hex:"#FFF3A3" },
-  { name:"포레스트 그린", hex:"#6BAF92" },
 ];
 const times = ["오전 9시","오전 10시","오전 11시","정오 12시","오후 1시","오후 2시","오후 3시","오후 4시","오후 5시","오후 6시","오후 7시","오후 8시"];
-const meWords = ["매력 폭발", "집중력 UP", "센스 장인", "분위기 메이커", "행운아", "에너지 충전", "힐링 모드", "카리스마", "감성 충만", "아이디어 뱅크"];
+const meWords = ["매력 폭발","집중력 UP","센스 장인","분위기 메이커","행운아","에너지 충전","힐링 모드","카리스마","감성 충만","아이디어 뱅크"];
 const bgDecos = ['🌸','✦','⋆','˚','✧','·','🫧','💧','🌿','°','⁎','✩','❋','🐚'];
 
 let userName = 'Kelly';
@@ -577,14 +574,17 @@ function buildBg() {
 function setDate() {
   const d = new Date();
   const days = ['일','월','화','수','목','금','토'];
-  const dateStr = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
+  const dateStr = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월 ' + d.getDate() + '일 (' + days[d.getDay()] + ')';
   const svgEls = document.querySelectorAll('#svgDate');
-  svgEls.forEach(el => el.textContent = dateStr);
+  svgEls.forEach(function(el) { el.textContent = dateStr; });
+  const badge = document.getElementById('lunarDate');
+  if (badge) badge.textContent = '✨ ' + dateStr;
 }
 
 function renderStars(n) {
-  return Array.from({length:5}, (_,i) =>
-    `<span class="star">${i < n ? '⭐' : '🌑'}</span>`).join('');
+  return Array.from({length:5}, function(_,i) {
+    return '<span class="star">' + (i < n ? '⭐' : '🌑') + '</span>';
+  }).join('');
 }
 
 function getLottoColor(n) {
@@ -597,9 +597,10 @@ function getLottoColor(n) {
 
 function renderLotto(numbers) {
   const balls = document.getElementById('lottoBalls');
-  balls.innerHTML = numbers.map(n =>
-    `<div class="ball ${getLottoColor(n)}">${n}</div>`
-  ).join('');
+  if (!balls || !numbers || !numbers.length) return;
+  balls.innerHTML = numbers.map(function(n) {
+    return '<div class="ball ' + getLottoColor(n) + '">' + n + '</div>';
+  }).join('');
 }
 
 function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -610,22 +611,16 @@ function fillMiniCards() {
   const time = pickRandom(times);
   const me = pickRandom(meWords);
   document.getElementById('mcLunch').textContent = lunch;
-  const colorDot = `<span class="color-dot" style="background:${col.hex}"></span>`;
-  document.getElementById('mcColor').innerHTML = col.name + colorDot;
+  document.getElementById('mcColor').innerHTML = col.name + '<span class="color-dot" style="background:' + col.hex + '"></span>';
   document.getElementById('mcTime').textContent = time;
   document.getElementById('mcMe').textContent = me;
 }
 
 function showCards(aiResult) {
-  // Parse AI response
-  let title = '', body = '', stars = 4, lotto = [];
-  try {
-    const t = aiResult.title || '';
-    const b = aiResult.body || '';
-    const s = parseInt(aiResult.stars) || 4;
-    const l = aiResult.lotto || [];
-    title = t; body = b; stars = Math.min(5, Math.max(1, s)); lotto = l;
-  } catch(e) {}
+  const title = aiResult.title || '오늘의 운세';
+  const body = aiResult.body || '';
+  const stars = Math.min(5, Math.max(1, parseInt(aiResult.stars) || 4));
+  const lotto = aiResult.lotto || [];
 
   document.getElementById('fortuneCategory').textContent = '🔮 AI 오늘의 운세';
   document.getElementById('starRow').innerHTML = renderStars(stars);
@@ -638,8 +633,8 @@ function showCards(aiResult) {
   document.getElementById('loadingCard').style.display = 'none';
   document.getElementById('mainCard').classList.remove('hidden');
   document.getElementById('lottoCard').classList.remove('hidden');
-  ['mc1','mc2','mc3','mc4'].forEach((id, i) => {
-    setTimeout(() => document.getElementById(id).classList.remove('hidden'), i * 80 + 100);
+  ['mc1','mc2','mc3','mc4'].forEach(function(id, i) {
+    setTimeout(function() { document.getElementById(id).classList.remove('hidden'); }, i * 80 + 100);
   });
   document.getElementById('rerollBtn').disabled = false;
 }
@@ -647,15 +642,20 @@ function showCards(aiResult) {
 function resetCards() {
   document.getElementById('mainCard').classList.add('hidden');
   document.getElementById('lottoCard').classList.add('hidden');
-  ['mc1','mc2','mc3','mc4'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['mc1','mc2','mc3','mc4'].forEach(function(id) { document.getElementById(id).classList.add('hidden'); });
   document.getElementById('loadingCard').style.display = 'block';
   document.getElementById('rerollBtn').disabled = true;
 }
 
 async function fetchFortune() {
+  const currentKey = window.GEMINI_API_KEY || apiKey || '';
+  if (!currentKey || currentKey === 'YOUR_API_KEY_HERE') {
+    throw new Error('API 키가 없어요');
+  }
+
   const d = new Date();
-  const dayNames = ['일','월','화','수','목','금','토'];
-  const today = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월 ' + d.getDate() + '일 (' + dayNames[d.getDay()] + '요일)';
+  const days = ['일','월','화','수','목','금','토'];
+  const today = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월 ' + d.getDate() + '일 (' + days[d.getDay()] + '요일)';
 
   let birthStr = '생년월일 미입력';
   let ageStr = '';
@@ -668,65 +668,66 @@ async function fetchFortune() {
     ageStr = ' (만 ' + a + '세)';
   }
 
-  // Build prompt using string concatenation to avoid template literal + JSON brace conflicts
-  const jsonSchema = '{"title": "운세 제목 (20자 이내)", "body": "운세 설명 (80~120자, ' + userName + '님 맞춤)", "stars": 별점숫자1~5, "lotto": [숫자1,숫자2,숫자3,숫자4,숫자5,숫자6]}';
-  const prompt = '당신은 재미있고 긍정적인 운세 점술사입니다.
+  const prompt = [
+    '당신은 재미있고 긍정적인 운세 점술사입니다.',
+    '이름: ' + userName,
+    '생년월일: ' + birthStr + ageStr,
+    '오늘 날짜: ' + today,
+    '',
+    '위 정보를 바탕으로 오늘의 운세를 JSON 형식으로만 응답해주세요.',
+    '다른 텍스트, 설명, 마크다운 없이 JSON 객체만 반환하세요.',
+    '형식: {"title":"제목(20자이내)","body":"운세설명(100자내외)","stars":별점숫자,"lotto":[번호1,번호2,번호3,번호4,번호5,번호6]}',
+    'stars는 1~5 사이 정수, lotto는 1~45 사이 중복없는 정수 6개.'
+  ].join('\n');
 
-'
-    + '이름: ' + userName + '
-'
-    + '생년월일: ' + birthStr + ageStr + '
-'
-    + '오늘 날짜: ' + today + '
-
-'
-    + '위 정보를 바탕으로 오늘의 운세를 작성해주세요.
-'
-    + '반드시 아래 JSON 형식으로만 응답하세요. 다른 텍스트나 마크다운 없이 JSON만:
-'
-    + jsonSchema;
-
-  const currentKey = apiKey || window.GEMINI_API_KEY || '';
-  if (!currentKey || currentKey === 'YOUR_API_KEY_HERE') throw new Error('API 키 없음');
+  const requestBody = {
+    contents: [{
+      parts: [{ text: prompt }]
+    }],
+    generationConfig: {
+      temperature: 0.9,
+      maxOutputTokens: 300
+    }
+  };
 
   const res = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + currentKey,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.9, maxOutputTokens: 512 }
-      })
+      body: JSON.stringify(requestBody)
     }
   );
 
   if (!res.ok) {
-    const errBody = await res.text();
-    console.error('Gemini API error:', res.status, errBody);
+    const errText = await res.text();
+    console.error('API Error ' + res.status + ':', errText);
     throw new Error('API 오류: ' + res.status);
   }
+
   const data = await res.json();
-  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  const jsonStr = raw.replace(/```json|```/g, '').trim();
-  return JSON.parse(jsonStr);
+  const raw = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) || '';
+  const cleaned = raw.replace(/```json/g, '').replace(/```/g, '').trim();
+  return JSON.parse(cleaned);
 }
 
 async function loadFortune() {
   resetCards();
-  document.getElementById('loadingText').innerHTML = `${userName}님의 오늘 운세를 AI가 읽고 있어요...<br>잠시만 기다려주세요 🌸`;
+  document.getElementById('loadingText').innerHTML = userName + '님의 오늘 운세를 AI가 읽고 있어요...<br>잠시만 기다려주세요 🌸';
   try {
     const result = await fetchFortune();
     showCards(result);
   } catch(e) {
+    console.error('loadFortune error:', e);
     document.getElementById('loadingCard').style.display = 'none';
     document.getElementById('mainCard').classList.remove('hidden');
     document.getElementById('fortuneCategory').textContent = '⚠️ 오류';
     document.getElementById('starRow').innerHTML = '';
     document.getElementById('fortuneTitle').textContent = 'API 연결에 실패했어요';
-    const msg = e.message.includes('429')
-      ? '오늘 요청 횟수를 초과했어요. 내일 다시 시도해주세요! (무료 플랜: 일 1,500회)'
-      : 'API 키를 확인하거나 잠시 후 다시 시도해보세요. (' + e.message + ')';
+    let msg = 'API 오류: ' + e.message;
+    if (e.message.includes('429')) msg = '오늘 요청 횟수를 초과했어요. 내일 다시 시도해주세요!';
+    else if (e.message.includes('400')) msg = '요청 형식 오류예요. 잠시 후 다시 시도해보세요.';
+    else if (e.message.includes('403')) msg = 'API 키 권한이 없어요. 키를 확인해주세요.';
     document.getElementById('fortuneBody').textContent = msg;
     document.getElementById('rerollBtn').disabled = false;
   }
@@ -735,28 +736,24 @@ async function loadFortune() {
 function startFortune() {
   const name = document.getElementById('inputName').value.trim();
   const birth = document.getElementById('inputBirth').value;
-
   if (!name) { alert('이름을 입력해주세요!'); return; }
   const key = window.GEMINI_API_KEY || '';
   if (!key || key === 'YOUR_API_KEY_HERE') {
-    alert('API 키가 설정되지 않았어요. GitHub Secret을 확인해주세요.');
+    alert('API 키가 없어요. GitHub Secret을 확인해주세요.');
     return;
   }
-
   userName = name;
   userBirth = birth;
   apiKey = key;
-
   sessionStorage.setItem('fortune_name', name);
   sessionStorage.setItem('fortune_birth', birth);
-
   document.getElementById('setupScreen').style.display = 'none';
   document.getElementById('mainScreen').style.display = 'flex';
   setDate();
   loadFortune();
 }
 
-function reroll() { loadFortune(); }
+function reroll() { goSetup(); }
 
 function goSetup() {
   document.getElementById('mainScreen').style.display = 'none';
@@ -765,18 +762,17 @@ function goSetup() {
 
 buildBg();
 
-// config.js loads after this script, so init runs on window load
 window.addEventListener('load', function() {
   const savedName = sessionStorage.getItem('fortune_name');
   const savedBirth = sessionStorage.getItem('fortune_birth');
   if (savedName) document.getElementById('inputName').value = savedName;
   if (savedBirth) document.getElementById('inputBirth').value = savedBirth;
-
   if (savedName && window.GEMINI_API_KEY && window.GEMINI_API_KEY !== 'YOUR_API_KEY_HERE') {
     startFortune();
   }
 });
 </script>
 <script src="config.js"></script>
+
 </body>
 </html>
