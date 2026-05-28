@@ -6,6 +6,7 @@
 <title>오늘의 운세 ✨</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<script src="config.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -95,13 +96,6 @@
     transition: border 0.2s;
   }
   .setup-input:focus { border-color: var(--lilac-mid); }
-  .api-note {
-    font-size: 0.72rem; color: var(--text-light);
-    background: var(--lilac-light); border-radius: 10px;
-    padding: 0.6rem 0.8rem; margin-bottom: 0.9rem;
-    line-height: 1.6;
-  }
-  .api-note a { color: var(--lilac-mid); }
 
   /* ── MAIN SCREEN ── */
   .wrap {
@@ -379,10 +373,7 @@
     <label class="setup-label">생년월일</label>
     <input class="setup-input" id="inputBirth" type="date" value="1997-05-26"/>
 
-    <div class="api-note">
-      🔑 API 키는 <code>config.js</code> 파일에 저장되어 있어요.<br>
-      GitHub Secret으로 안전하게 관리됩니다.
-    </div>
+
 
     <button class="btn" style="max-width:100%" onclick="startFortune()">🔮 운세 보기</button>
   </div>
@@ -545,7 +536,6 @@
   <button class="btn-sm" onclick="goSetup()">⚙ 설정 변경</button>
 </div>
 
-<script src="config.js"></script>
 <script>
 const lunches = ["김치찌개 🍲","된장찌개 🫕","비빔밥 🥗","불고기 정식 🥩","삼겹살 구이 🥓","냉면 🍜","짜장면 🍝","짬뽕 🍜","순두부찌개 🥘","갈비탕 🍲","떡볶이 🌶️","순대국밥 🫕","칼국수 🍜","쌀국수 🍜","마라탕 🌶️","초밥 🍣","라멘 🍜","파스타 🍝","샌드위치 🥪","샐러드 🥗","치킨 🍗","피자 🍕","버거 🍔","제육볶음 🥘","오므라이스 🍳","카레 🍛","덮밥 🍚","타코 🌮","아보카도 토스트 🥑","훠궈 🍲"];
 
@@ -727,11 +717,15 @@ function startFortune() {
   const birth = document.getElementById('inputBirth').value;
 
   if (!name) { alert('이름을 입력해주세요!'); return; }
-  if (!window.GEMINI_API_KEY) { alert('config.js에 API 키가 설정되지 않았어요!'); return; }
+  const key = window.GEMINI_API_KEY || '';
+  if (!key || key === 'YOUR_API_KEY_HERE') {
+    alert('API 키가 설정되지 않았어요. GitHub Secret을 확인해주세요.');
+    return;
+  }
 
   userName = name;
   userBirth = birth;
-  apiKey = window.GEMINI_API_KEY;
+  apiKey = key;
 
   sessionStorage.setItem('fortune_name', name);
   sessionStorage.setItem('fortune_birth', birth);
