@@ -6,7 +6,6 @@
 <title>오늘의 운세 ✨</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
-<script src="config.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -748,16 +747,28 @@ function goSetup() {
 
 buildBg();
 
-// Restore saved values
-const savedName = sessionStorage.getItem('fortune_name');
-const savedBirth = sessionStorage.getItem('fortune_birth');
-if (savedName) document.getElementById('inputName').value = savedName;
-if (savedBirth) document.getElementById('inputBirth').value = savedBirth;
-
-// Auto-start if name already saved
-if (savedName && window.GEMINI_API_KEY) {
-  startFortune();
+// Dynamically load config.js so key is guaranteed available
+function loadConfig() {
+  return new Promise((resolve) => {
+    const s = document.createElement('script');
+    s.src = 'config.js?v=' + Date.now();
+    s.onload = () => resolve(true);
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+  });
 }
+
+loadConfig().then(() => {
+  const savedName = sessionStorage.getItem('fortune_name');
+  const savedBirth = sessionStorage.getItem('fortune_birth');
+  if (savedName) document.getElementById('inputName').value = savedName;
+  if (savedBirth) document.getElementById('inputBirth').value = savedBirth;
+
+  // Auto-start if name already saved and key exists
+  if (savedName && window.GEMINI_API_KEY && window.GEMINI_API_KEY !== 'YOUR_API_KEY_HERE') {
+    startFortune();
+  }
+});
 </script>
 </body>
 </html>
