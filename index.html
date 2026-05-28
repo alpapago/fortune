@@ -365,7 +365,7 @@
   </div>
 
   <div class="setup-card">
-    <div class="setup-title">✨ 오늘의 운세 시작하기</div>
+    <div class="setup-title">✨ 오늘의 운세</div>
 
     <label class="setup-label">이름</label>
     <input class="setup-input" id="inputName" type="text" placeholder="이름을 입력하세요 (예: Kelly)" value="Kelly"/>
@@ -707,7 +707,10 @@ async function loadFortune() {
     document.getElementById('fortuneCategory').textContent = '⚠️ 오류';
     document.getElementById('starRow').innerHTML = '';
     document.getElementById('fortuneTitle').textContent = 'API 연결에 실패했어요';
-    document.getElementById('fortuneBody').textContent = 'API 키를 확인하거나 잠시 후 다시 시도해보세요. (' + e.message + ')';
+    const msg = e.message.includes('429')
+      ? '오늘 요청 횟수를 초과했어요. 내일 다시 시도해주세요! (무료 플랜: 일 1,500회)'
+      : 'API 키를 확인하거나 잠시 후 다시 시도해보세요. (' + e.message + ')';
+    document.getElementById('fortuneBody').textContent = msg;
     document.getElementById('rerollBtn').disabled = false;
   }
 }
