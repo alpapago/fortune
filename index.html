@@ -654,43 +654,58 @@ function resetCards() {
 
 async function fetchFortune() {
   const d = new Date();
-  const today = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${['일','월','화','수','목','금','토'][d.getDay()]}요일)`;
+  const dayNames = ['일','월','화','수','목','금','토'];
+  const today = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월 ' + d.getDate() + '일 (' + dayNames[d.getDay()] + '요일)';
 
-  const birthStr = userBirth
-    ? (() => { const b = new Date(userBirth); return `${b.getFullYear()}년 ${b.getMonth()+1}월 ${b.getDate()}일생`; })()
-    : '생년월일 미입력';
+  let birthStr = '생년월일 미입력';
+  let ageStr = '';
+  if (userBirth) {
+    const b = new Date(userBirth);
+    birthStr = b.getFullYear() + '년 ' + (b.getMonth()+1) + '월 ' + b.getDate() + '일생';
+    const now = new Date();
+    let a = now.getFullYear() - b.getFullYear();
+    if (now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) a--;
+    ageStr = ' (만 ' + a + '세)';
+  }
 
-  const age = userBirth
-    ? (() => { const b = new Date(userBirth); const now = new Date(); let a = now.getFullYear() - b.getFullYear(); if (now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) a--; return a; })()
-    : '';
+  // Build prompt using string concatenation to avoid template literal + JSON brace conflicts
+  const jsonSchema = '{"title": "운세 제목 (20자 이내)", "body": "운세 설명 (80~120자, ' + userName + '님 맞춤)", "stars": 별점숫자1~5, "lotto": [숫자1,숫자2,숫자3,숫자4,숫자5,숫자6]}';
+  const prompt = '당신은 재미있고 긍정적인 운세 점술사입니다.
 
-  const prompt = `당신은 재미있고 긍정적인 운세 점술사입니다. 아래 정보를 바탕으로 오늘의 운세를 작성해주세요.
+'
+    + '이름: ' + userName + '
+'
+    + '생년월일: ' + birthStr + ageStr + '
+'
+    + '오늘 날짜: ' + today + '
 
-이름: ${userName}
-생년월일: ${birthStr}${age ? ` (만 ${age}세)` : ''}
-오늘 날짜: ${today}
+'
+    + '위 정보를 바탕으로 오늘의 운세를 작성해주세요.
+'
+    + '반드시 아래 JSON 형식으로만 응답하세요. 다른 텍스트나 마크다운 없이 JSON만:
+'
+    + jsonSchema;
 
-다음 JSON 형식으로만 응답하세요 (다른 텍스트 없이):
-{
-  "title": "오늘 운세 한 줄 제목 (20자 이내, 재미있고 공감가게)",
-  "body": "오늘의 운세 설명 (80~120자, ${userName}님에게 맞춘 따뜻하고 재미있는 운세. 생년월일 기반 기운 언급)",
-  "stars": 별점 숫자 (1~5),
-  "lotto": [로또번호 6개 숫자 배열, 1~45 사이 중복없이]
-}`;
-
-  // Read key fresh in case it loaded after init
   const currentKey = apiKey || window.GEMINI_API_KEY || '';
   if (!currentKey || currentKey === 'YOUR_API_KEY_HERE') throw new Error('API 키 없음');
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${currentKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.9, maxOutputTokens: 512 }
-    })
-  });
 
-  if (!res.ok) throw new Error('API 오류: ' + res.status);
+  const res = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + currentKey,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.9, maxOutputTokens: 512 }
+      })
+    }
+  );
+
+  if (!res.ok) {
+    const errBody = await res.text();
+    console.error('Gemini API error:', res.status, errBody);
+    throw new Error('API 오류: ' + res.status);
+  }
   const data = await res.json();
   const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
   const jsonStr = raw.replace(/```json|```/g, '').trim();
