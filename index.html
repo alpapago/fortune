@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
     --bg: #EEF6FB;
     --lilac: #C8A8E9;
@@ -24,7 +23,6 @@
     --gold: #F5D87A;
     --card-bg: #FAFEFF;
   }
-
   body {
     font-family: 'Gowun Dodum', serif;
     background: var(--bg);
@@ -38,8 +36,6 @@
     overflow-x: hidden;
     position: relative;
   }
-
-  /* 배경 물결 */
   body::before {
     content: '';
     position: fixed;
@@ -49,17 +45,12 @@
     pointer-events: none;
     z-index: 0;
   }
-
   .bg-deco {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
+    position: fixed; inset: 0;
+    pointer-events: none; overflow: hidden; z-index: 0;
   }
   .bg-deco span {
-    position: absolute;
-    opacity: 0.13;
+    position: absolute; opacity: 0.13;
     animation: float-deco 8s ease-in-out infinite;
   }
   @keyframes float-deco {
@@ -67,216 +58,341 @@
     50% { transform: translateY(-14px) rotate(12deg); }
   }
 
-  .wrap {
-    position: relative;
-    z-index: 1;
+  /* ── SETUP SCREEN ── */
+  .setup-screen {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 380px;
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  }
+  .setup-card {
+    background: var(--card-bg);
+    border-radius: 24px;
+    border: 1.5px solid var(--lilac);
+    padding: 1.8rem 1.6rem;
     width: 100%;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    box-shadow: 0 4px 28px rgba(180,143,216,0.15);
+  }
+  .setup-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--text); text-align: center;
+    margin-bottom: 1.2rem;
+  }
+  .setup-label {
+    font-size: 0.78rem; color: var(--text-light);
+    margin-bottom: 0.3rem; display: block;
+  }
+  .setup-input {
+    width: 100%;
+    border: 1.5px solid var(--sky);
+    border-radius: 12px;
+    padding: 0.65rem 0.9rem;
+    font-family: 'Gowun Dodum', serif;
+    font-size: 0.95rem; color: var(--text);
+    background: var(--bg);
+    margin-bottom: 0.9rem;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .setup-input:focus { border-color: var(--lilac-mid); }
+  .api-note {
+    font-size: 0.72rem; color: var(--text-light);
+    background: var(--lilac-light); border-radius: 10px;
+    padding: 0.6rem 0.8rem; margin-bottom: 0.9rem;
+    line-height: 1.6;
+  }
+  .api-note a { color: var(--lilac-mid); }
+
+  /* ── MAIN SCREEN ── */
+  .wrap {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 420px;
+    display: flex; flex-direction: column; align-items: center;
     gap: 0.75rem;
   }
-
-  header { text-align: center; }
-
-  .header-emoji {
-    font-size: 2.4rem;
-    display: block;
-    animation: spin-slow 6s ease-in-out infinite;
+  .lilac-header-svg { width: 100%; margin-bottom: -0.3rem; }
+  .nfc-chip {
+    font-size: 0.74rem;
+    background: var(--aqua-light); color: #3A7A8A;
+    border-radius: 999px; padding: 0.25rem 0.8rem;
+    margin-bottom: 0.2rem; display: inline-block;
   }
-  @keyframes spin-slow {
-    0%, 100% { transform: rotate(-6deg) scale(1); }
-    50% { transform: rotate(6deg) scale(1.08); }
-  }
-
-  header h1 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-top: 0.25rem;
-    letter-spacing: -0.02em;
-  }
-  header p {
-    font-size: 0.82rem;
-    color: var(--text-light);
-    margin-top: 0.25rem;
-  }
-
   .date-badge {
     background: linear-gradient(135deg, var(--lilac), var(--aqua));
-    color: #fff;
-    border-radius: 999px;
-    padding: 0.35rem 1.2rem;
-    font-size: 0.78rem;
-    font-family: 'Gowun Dodum', serif;
-    letter-spacing: 0.03em;
+    color: #fff; border-radius: 999px;
+    padding: 0.35rem 1.2rem; font-size: 0.78rem;
+    font-family: 'Gowun Dodum', serif; letter-spacing: 0.03em;
   }
 
-  /* 탄생화 배너 */
-  .lilac-header-svg {
-    width: 100%;
-    margin-bottom: -0.3rem;
+  /* ── LOADING ── */
+  .loading-card {
+    background: var(--card-bg);
+    border-radius: 22px; border: 1.5px solid var(--aqua);
+    padding: 2rem 1.4rem; width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 28px rgba(125,212,232,0.15);
   }
-
-  /* STAR rating */
-  .star-row {
-    display: flex;
-    gap: 0.22rem;
-    justify-content: center;
-    margin: 0.2rem 0 0.1rem;
+  .loading-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--lilac-light);
+    border-top-color: var(--lilac-mid);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 0.8rem;
   }
-  .star { font-size: 1.05rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 0.9rem; color: var(--text-light); line-height: 1.7; }
 
-  /* Fortune card */
+  /* ── FORTUNE CARD ── */
   .card {
     background: var(--card-bg);
-    border-radius: 22px;
-    border: 1.5px solid var(--aqua);
-    padding: 1.2rem 1.4rem;
-    width: 100%;
+    border-radius: 22px; border: 1.5px solid var(--aqua);
+    padding: 1.2rem 1.4rem; width: 100%;
     box-shadow: 0 4px 28px rgba(125,212,232,0.15);
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
-  .card.hidden {
-    opacity: 0;
-    transform: scale(0.95) translateY(8px);
-    pointer-events: none;
-  }
+  .card.hidden { opacity: 0; transform: scale(0.95) translateY(8px); pointer-events: none; }
   .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
     background: linear-gradient(90deg, var(--lilac), var(--aqua), var(--seafoam));
   }
-
   .fortune-category {
-    justify-content: center;
-    text-align: center;
-    font-size: 0.72rem;
-    letter-spacing: 0.07em;
-    color: var(--aqua);
-    filter: brightness(0.75);
+    justify-content: center; text-align: center;
+    font-size: 0.72rem; letter-spacing: 0.07em;
+    color: var(--aqua); filter: brightness(0.75);
     margin-bottom: 0.45rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    display: flex; align-items: center; gap: 0.4rem;
   }
+  .star-row { display: flex; gap: 0.22rem; justify-content: center; margin: 0.2rem 0 0.1rem; }
+  .star { font-size: 1.05rem; }
   .fortune-title {
-    text-align: center;
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.45rem;
-    line-height: 1.5;
+    text-align: center; font-family: 'Noto Serif KR', serif;
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--text); margin-bottom: 0.45rem; line-height: 1.55;
   }
   .fortune-body {
-    text-align: center;
-    font-size: 0.92rem;
-    color: var(--text-light);
-    line-height: 1.85;
+    text-align: center; font-size: 0.9rem;
+    color: var(--text-light); line-height: 1.85;
   }
 
-  /* Mini fortune items */
+  /* ── LOTTO CARD ── */
+  .lotto-card {
+    background: var(--card-bg);
+    border-radius: 22px; border: 1.5px solid var(--gold);
+    padding: 1rem 1.2rem; width: 100%;
+    box-shadow: 0 4px 20px rgba(245,216,122,0.18);
+    text-align: center;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .lotto-card.hidden { opacity: 0; transform: translateY(6px); }
+  .lotto-label {
+    font-size: 0.72rem; color: #B89A30; margin-bottom: 0.55rem;
+    letter-spacing: 0.06em;
+  }
+  .lotto-balls {
+    display: flex; gap: 0.45rem; justify-content: center; flex-wrap: wrap;
+  }
+  .ball {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.85rem; font-weight: 700; color: #fff;
+  }
+  .ball.r1 { background: #E8C840; }
+  .ball.r2 { background: #4BA8E8; }
+  .ball.r3 { background: #E05858; }
+  .ball.r4 { background: #888; }
+  .ball.r5 { background: #5CC870; }
+
+  /* ── MINI CARDS ── */
   .mini-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.65rem;
-    width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.65rem; width: 100%;
   }
   .mini-card {
-    text-align: center;
-    background: var(--card-bg);
-    border: 1.5px solid var(--sky);
-    border-radius: 16px;
+    text-align: center; background: var(--card-bg);
+    border: 1.5px solid var(--sky); border-radius: 16px;
     padding: 0.75rem;
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
-  .mini-card.hidden {
-    opacity: 0;
-    transform: translateY(6px);
-  }
+  .mini-card.hidden { opacity: 0; transform: translateY(6px); }
   .mini-card-label {
-    justify-content: center;
-    font-size: 0.68rem;
-    color: var(--text-light);
-    margin-bottom: 0.3rem;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    justify-content: center; font-size: 0.68rem;
+    color: var(--text-light); margin-bottom: 0.3rem;
+    display: flex; align-items: center; gap: 0.25rem;
   }
   .mini-card-value {
-    text-align: center;
-    font-family: 'Noto Serif KR', serif;
-    font-size: 0.97rem;
-    font-weight: 700;
-    color: var(--text);
+    text-align: center; font-family: 'Noto Serif KR', serif;
+    font-size: 0.97rem; font-weight: 700; color: var(--text);
   }
-
   .color-dot {
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    vertical-align: -2px;
-    margin-left: 5px;
-    border: 1.5px solid rgba(0,0,0,0.08);
+    display: inline-block; width: 13px; height: 13px;
+    border-radius: 50%; vertical-align: -2px;
+    margin-left: 5px; border: 1.5px solid rgba(0,0,0,0.08);
   }
 
-  /* CTA button */
+  /* ── BUTTONS ── */
   .btn {
     background: linear-gradient(135deg, var(--lilac-mid), var(--aqua));
-    color: white;
-    border: none;
-    border-radius: 999px;
-    padding: 0.7rem 2rem;
-    font-family: 'Gowun Dodum', serif;
-    font-size: 1rem;
-    cursor: pointer;
+    color: white; border: none; border-radius: 999px;
+    padding: 0.7rem 2rem; font-family: 'Gowun Dodum', serif;
+    font-size: 1rem; cursor: pointer;
     transition: transform 0.15s, filter 0.15s;
     box-shadow: 0 4px 18px rgba(180,143,216,0.32);
-    width: 100%;
-    max-width: 280px;
+    width: 100%; max-width: 280px;
   }
   .btn:hover { filter: brightness(1.07); transform: translateY(-2px); }
   .btn:active { transform: scale(0.97); }
-
-  .footer-note {
-    font-size: 0.7rem;
-    color: var(--text-light);
-    text-align: center;
-    opacity: 0.65;
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-sm {
+    background: none; border: 1.5px solid var(--lilac);
+    color: var(--lilac-mid); border-radius: 999px;
+    padding: 0.4rem 1.2rem; font-family: 'Gowun Dodum', serif;
+    font-size: 0.82rem; cursor: pointer;
+    transition: background 0.15s;
   }
-
-  .nfc-chip {
-    font-size: 0.74rem;
-    background: var(--aqua-light);
-    color: #3A7A8A;
-    border-radius: 999px;
-    padding: 0.25rem 0.8rem;
-    margin-bottom: 0.2rem;
-    display: inline-block;
-  }
+  .btn-sm:hover { background: var(--lilac-light); }
 
   @media (max-width: 360px) {
-    header h1 { font-size: 1.2rem; }
     .mini-cards { gap: 0.5rem; }
   }
 </style>
 </head>
 <body>
-
 <div class="bg-deco" id="bgDeco"></div>
 
-<div class="wrap">
+<!-- ══ SETUP SCREEN ══ -->
+<div class="setup-screen" id="setupScreen">
+  <div class="lilac-header-svg">
+    <svg viewBox="0 0 420 160" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block; overflow:visible;">
+        <defs>
+          <linearGradient id="lsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8FBF78"/><stop offset="100%" stop-color="#4E7A40"/></linearGradient>
+          <linearGradient id="lpG1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E8D0F8"/><stop offset="100%" stop-color="#B48CD6"/></linearGradient>
+          <linearGradient id="lpG2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C8A8E9"/><stop offset="100%" stop-color="#8B5CC8"/></linearGradient>
+          <linearGradient id="lpG3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#D4B8F0"/><stop offset="100%" stop-color="#9B70D0"/></linearGradient>
+          <linearGradient id="llG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#B0D8A0"/><stop offset="100%" stop-color="#5A9048"/></linearGradient>
+          <linearGradient id="llG2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#90C880"/><stop offset="100%" stop-color="#3E7830"/></linearGradient>
+        </defs>
+
+        <!-- ===== LEFT BRANCH ===== -->
+        <!-- main stem -->
+        <path d="M72 158 C70 140 68 118 65 95 C62 72 58 52 54 30" stroke="url(#lsG)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- sub stems -->
+        <path d="M65 95 C58 85 50 72 42 58" stroke="url(#lsG)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M65 95 C72 85 80 72 88 56" stroke="url(#lsG)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M54 30 C48 22 44 14 40 6" stroke="url(#lsG)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M54 30 C60 22 65 15 66 7" stroke="url(#lsG)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- big leaf left -->
+        <path d="M65 112 C48 104 34 106 28 118 C40 118 54 116 65 112Z" fill="url(#llG)" opacity="0.9"/>
+        <path d="M65 112 C48 104 34 106 28 118" stroke="#4E7A40" stroke-width="0.8" fill="none"/>
+        <path d="M65 112 C55 108 42 108 36 114" stroke="#5A9048" stroke-width="0.5" fill="none" opacity="0.6"/>
+        <!-- big leaf right -->
+        <path d="M72 108 C88 100 104 102 110 114 C98 114 84 112 72 108Z" fill="url(#llG2)" opacity="0.85"/>
+        <path d="M72 108 C88 100 104 102 110 114" stroke="#3E7830" stroke-width="0.8" fill="none"/>
+        <!-- small leaf on sub -->
+        <path d="M55 72 C44 66 36 68 32 76 C40 76 48 74 55 72Z" fill="url(#llG)" opacity="0.8"/>
+        <path d="M75 68 C86 62 94 64 96 72 C88 72 81 70 75 68Z" fill="url(#llG2)" opacity="0.75"/>
+
+        <!-- flower cluster: center top -->
+        <!-- each tiny lilac flower = 4 rounded petals + center -->
+        <!-- cluster top-center (biggest, densest) -->
+        <!-- row 1 tip -->
+        <g opacity="0.7"><ellipse cx="54" cy="8" rx="5" ry="3.5" fill="url(#lpG1)" transform="rotate(0 54 8)"/><ellipse cx="54" cy="8" rx="5" ry="3.5" fill="url(#lpG1)" transform="rotate(90 54 8)"/><ellipse cx="54" cy="8" rx="5" ry="3.5" fill="url(#lpG1)" transform="rotate(45 54 8)"/><ellipse cx="54" cy="8" rx="5" ry="3.5" fill="url(#lpG1)" transform="rotate(135 54 8)"/><circle cx="54" cy="8" r="2.5" fill="#F2E8FF"/></g>
+        <g opacity="0.75"><ellipse cx="66" cy="9" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(20 66 9)"/><ellipse cx="66" cy="9" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(110 66 9)"/><ellipse cx="66" cy="9" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(200 66 9)"/><ellipse cx="66" cy="9" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(290 66 9)"/><circle cx="66" cy="9" r="2.2" fill="#EEE0FF"/></g>
+        <!-- row 2 -->
+        <g opacity="0.85"><ellipse cx="46" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(0 46 18)"/><ellipse cx="46" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(90 46 18)"/><ellipse cx="46" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(45 46 18)"/><ellipse cx="46" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(135 46 18)"/><circle cx="46" cy="18" r="2.5" fill="#F5EEFF"/></g>
+        <g opacity="0.9"><ellipse cx="57" cy="20" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(15 57 20)"/><ellipse cx="57" cy="20" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(105 57 20)"/><ellipse cx="57" cy="20" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(195 57 20)"/><ellipse cx="57" cy="20" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(285 57 20)"/><circle cx="57" cy="20" r="2.8" fill="#F2E8FF"/></g>
+        <g opacity="0.82"><ellipse cx="68" cy="19" rx="5" ry="3.5" fill="url(#lpG2)" transform="rotate(-10 68 19)"/><ellipse cx="68" cy="19" rx="5" ry="3.5" fill="url(#lpG2)" transform="rotate(80 68 19)"/><ellipse cx="68" cy="19" rx="5" ry="3.5" fill="url(#lpG2)" transform="rotate(170 68 19)"/><ellipse cx="68" cy="19" rx="5" ry="3.5" fill="url(#lpG2)" transform="rotate(260 68 19)"/><circle cx="68" cy="19" r="2.2" fill="#EEE0FF"/></g>
+        <!-- row 3 -->
+        <g opacity="0.92"><ellipse cx="42" cy="30" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(0 42 30)"/><ellipse cx="42" cy="30" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(90 42 30)"/><ellipse cx="42" cy="30" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(45 42 30)"/><ellipse cx="42" cy="30" rx="5.5" ry="4" fill="url(#lpG1)" transform="rotate(135 42 30)"/><circle cx="42" cy="30" r="2.8" fill="#F5EEFF"/></g>
+        <g opacity="0.95"><ellipse cx="54" cy="33" rx="6" ry="4.2" fill="url(#lpG3)" transform="rotate(10 54 33)"/><ellipse cx="54" cy="33" rx="6" ry="4.2" fill="url(#lpG3)" transform="rotate(100 54 33)"/><ellipse cx="54" cy="33" rx="6" ry="4.2" fill="url(#lpG3)" transform="rotate(190 54 33)"/><ellipse cx="54" cy="33" rx="6" ry="4.2" fill="url(#lpG3)" transform="rotate(280 54 33)"/><circle cx="54" cy="33" r="3" fill="#F0E4FF"/></g>
+        <g opacity="0.88"><ellipse cx="66" cy="31" rx="5.5" ry="3.8" fill="url(#lpG2)" transform="rotate(-5 66 31)"/><ellipse cx="66" cy="31" rx="5.5" ry="3.8" fill="url(#lpG2)" transform="rotate(85 66 31)"/><ellipse cx="66" cy="31" rx="5.5" ry="3.8" fill="url(#lpG2)" transform="rotate(175 66 31)"/><ellipse cx="66" cy="31" rx="5.5" ry="3.8" fill="url(#lpG2)" transform="rotate(265 66 31)"/><circle cx="66" cy="31" r="2.5" fill="#EEE0FF"/></g>
+        <g opacity="0.72"><ellipse cx="76" cy="28" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(20 76 28)"/><ellipse cx="76" cy="28" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(110 76 28)"/><ellipse cx="76" cy="28" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(200 76 28)"/><ellipse cx="76" cy="28" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(290 76 28)"/><circle cx="76" cy="28" r="2" fill="#F5EEFF"/></g>
+        <!-- row 4 widest -->
+        <g opacity="0.88"><ellipse cx="40" cy="44" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(0 40 44)"/><ellipse cx="40" cy="44" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(90 40 44)"/><ellipse cx="40" cy="44" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(45 40 44)"/><ellipse cx="40" cy="44" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(135 40 44)"/><circle cx="40" cy="44" r="2.8" fill="#EEE0FF"/></g>
+        <g opacity="0.95"><ellipse cx="52" cy="47" rx="6" ry="4.5" fill="url(#lpG1)" transform="rotate(5 52 47)"/><ellipse cx="52" cy="47" rx="6" ry="4.5" fill="url(#lpG1)" transform="rotate(95 52 47)"/><ellipse cx="52" cy="47" rx="6" ry="4.5" fill="url(#lpG1)" transform="rotate(185 52 47)"/><ellipse cx="52" cy="47" rx="6" ry="4.5" fill="url(#lpG1)" transform="rotate(275 52 47)"/><circle cx="52" cy="47" r="3.2" fill="#F2E8FF"/></g>
+        <g opacity="0.92"><ellipse cx="64" cy="45" rx="5.8" ry="4.2" fill="url(#lpG3)" transform="rotate(-8 64 45)"/><ellipse cx="64" cy="45" rx="5.8" ry="4.2" fill="url(#lpG3)" transform="rotate(82 64 45)"/><ellipse cx="64" cy="45" rx="5.8" ry="4.2" fill="url(#lpG3)" transform="rotate(172 64 45)"/><ellipse cx="64" cy="45" rx="5.8" ry="4.2" fill="url(#lpG3)" transform="rotate(262 64 45)"/><circle cx="64" cy="45" r="3" fill="#F0E4FF"/></g>
+        <g opacity="0.82"><ellipse cx="76" cy="42" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(15 76 42)"/><ellipse cx="76" cy="42" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(105 76 42)"/><ellipse cx="76" cy="42" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(195 76 42)"/><ellipse cx="76" cy="42" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(285 76 42)"/><circle cx="76" cy="42" r="2.5" fill="#EEE0FF"/></g>
+        <g opacity="0.72"><ellipse cx="87" cy="44" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(-5 87 44)"/><ellipse cx="87" cy="44" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(85 87 44)"/><ellipse cx="87" cy="44" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(175 87 44)"/><ellipse cx="87" cy="44" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(265 87 44)"/><circle cx="87" cy="44" r="2.2" fill="#F5EEFF"/></g>
+
+        <!-- left sub-branch cluster -->
+        <g opacity="0.88"><ellipse cx="42" cy="58" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(0 42 58)"/><ellipse cx="42" cy="58" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(90 42 58)"/><ellipse cx="42" cy="58" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(45 42 58)"/><ellipse cx="42" cy="58" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(135 42 58)"/><circle cx="42" cy="58" r="2.8" fill="#F0E4FF"/></g>
+        <g opacity="0.78"><ellipse cx="32" cy="54" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(20 32 54)"/><ellipse cx="32" cy="54" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(110 32 54)"/><ellipse cx="32" cy="54" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(200 32 54)"/><ellipse cx="32" cy="54" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(290 32 54)"/><circle cx="32" cy="54" r="2" fill="#F5EEFF"/></g>
+
+        <!-- right sub-branch cluster -->
+        <g opacity="0.85"><ellipse cx="88" cy="56" rx="5" ry="3.8" fill="url(#lpG2)" transform="rotate(0 88 56)"/><ellipse cx="88" cy="56" rx="5" ry="3.8" fill="url(#lpG2)" transform="rotate(90 88 56)"/><ellipse cx="88" cy="56" rx="5" ry="3.8" fill="url(#lpG2)" transform="rotate(45 88 56)"/><ellipse cx="88" cy="56" rx="5" ry="3.8" fill="url(#lpG2)" transform="rotate(135 88 56)"/><circle cx="88" cy="56" r="2.8" fill="#EEE0FF"/></g>
+        <g opacity="0.72"><ellipse cx="98" cy="52" rx="4.2" ry="3" fill="url(#lpG3)" transform="rotate(-10 98 52)"/><ellipse cx="98" cy="52" rx="4.2" ry="3" fill="url(#lpG3)" transform="rotate(80 98 52)"/><ellipse cx="98" cy="52" rx="4.2" ry="3" fill="url(#lpG3)" transform="rotate(170 98 52)"/><ellipse cx="98" cy="52" rx="4.2" ry="3" fill="url(#lpG3)" transform="rotate(260 98 52)"/><circle cx="98" cy="52" r="1.8" fill="#F5EEFF"/></g>
+
+        <!-- tiny buds -->
+        <ellipse cx="38" cy="10" rx="3" ry="5" fill="#D4B8F0" transform="rotate(-20 38 10)" opacity="0.65"/>
+        <ellipse cx="74" cy="15" rx="2.5" ry="4.5" fill="#C8A8E9" transform="rotate(15 74 15)" opacity="0.55"/>
+        <ellipse cx="30" cy="46" rx="2" ry="4" fill="#DFC4F5" transform="rotate(-30 30 46)" opacity="0.5"/>
+
+        <!-- ===== RIGHT BRANCH (smaller, leaning right) ===== -->
+        <path d="M348 158 C350 138 354 115 358 92 C362 68 366 46 370 22" stroke="url(#lsG)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        <path d="M358 92 C350 80 342 66 336 52" stroke="url(#lsG)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M358 92 C366 80 376 66 384 52" stroke="url(#lsG)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M370 22 C364 14 360 8 358 4" stroke="url(#lsG)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M370 22 C376 14 380 8 382 4" stroke="url(#lsG)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- right leaves -->
+        <path d="M354 108 C338 100 322 102 316 114 C328 114 342 112 354 108Z" fill="url(#llG)" opacity="0.88"/>
+        <path d="M354 108 C338 100 322 102 316 114" stroke="#4E7A40" stroke-width="0.8" fill="none"/>
+        <path d="M362 105 C378 97 394 99 400 111 C388 111 374 109 362 105Z" fill="url(#llG2)" opacity="0.82"/>
+        <path d="M340 72 C328 66 318 68 314 76 C322 76 332 74 340 72Z" fill="url(#llG)" opacity="0.76"/>
+        <path d="M376 68 C388 62 398 64 400 72 C392 72 383 70 376 68Z" fill="url(#llG2)" opacity="0.72"/>
+
+        <!-- right flower clusters -->
+        <g opacity="0.72"><ellipse cx="370" cy="6" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(0 370 6)"/><ellipse cx="370" cy="6" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(90 370 6)"/><ellipse cx="370" cy="6" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(45 370 6)"/><ellipse cx="370" cy="6" rx="4.5" ry="3.2" fill="url(#lpG2)" transform="rotate(135 370 6)"/><circle cx="370" cy="6" r="2.2" fill="#EEE0FF"/></g>
+        <g opacity="0.68"><ellipse cx="358" cy="6" rx="4" ry="3" fill="url(#lpG1)" transform="rotate(15 358 6)"/><ellipse cx="358" cy="6" rx="4" ry="3" fill="url(#lpG1)" transform="rotate(105 358 6)"/><ellipse cx="358" cy="6" rx="4" ry="3" fill="url(#lpG1)" transform="rotate(195 358 6)"/><ellipse cx="358" cy="6" rx="4" ry="3" fill="url(#lpG1)" transform="rotate(285 358 6)"/><circle cx="358" cy="6" r="2" fill="#F5EEFF"/></g>
+        <g opacity="0.82"><ellipse cx="362" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(0 362 18)"/><ellipse cx="362" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(90 362 18)"/><ellipse cx="362" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(45 362 18)"/><ellipse cx="362" cy="18" rx="5" ry="3.8" fill="url(#lpG3)" transform="rotate(135 362 18)"/><circle cx="362" cy="18" r="2.5" fill="#F0E4FF"/></g>
+        <g opacity="0.78"><ellipse cx="374" cy="17" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(-10 374 17)"/><ellipse cx="374" cy="17" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(80 374 17)"/><ellipse cx="374" cy="17" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(170 374 17)"/><ellipse cx="374" cy="17" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(260 374 17)"/><circle cx="374" cy="17" r="2.3" fill="#F2E8FF"/></g>
+        <g opacity="0.88"><ellipse cx="358" cy="30" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(8 358 30)"/><ellipse cx="358" cy="30" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(98 358 30)"/><ellipse cx="358" cy="30" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(188 358 30)"/><ellipse cx="358" cy="30" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(278 358 30)"/><circle cx="358" cy="30" r="2.8" fill="#EEE0FF"/></g>
+        <g opacity="0.84"><ellipse cx="370" cy="29" rx="5.2" ry="3.8" fill="url(#lpG3)" transform="rotate(-5 370 29)"/><ellipse cx="370" cy="29" rx="5.2" ry="3.8" fill="url(#lpG3)" transform="rotate(85 370 29)"/><ellipse cx="370" cy="29" rx="5.2" ry="3.8" fill="url(#lpG3)" transform="rotate(175 370 29)"/><ellipse cx="370" cy="29" rx="5.2" ry="3.8" fill="url(#lpG3)" transform="rotate(265 370 29)"/><circle cx="370" cy="29" r="2.6" fill="#F0E4FF"/></g>
+        <g opacity="0.78"><ellipse cx="382" cy="26" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(20 382 26)"/><ellipse cx="382" cy="26" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(110 382 26)"/><ellipse cx="382" cy="26" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(200 382 26)"/><ellipse cx="382" cy="26" rx="4.5" ry="3.2" fill="url(#lpG1)" transform="rotate(290 382 26)"/><circle cx="382" cy="26" r="2.2" fill="#F5EEFF"/></g>
+        <g opacity="0.9"><ellipse cx="354" cy="43" rx="5.8" ry="4.2" fill="url(#lpG1)" transform="rotate(0 354 43)"/><ellipse cx="354" cy="43" rx="5.8" ry="4.2" fill="url(#lpG1)" transform="rotate(90 354 43)"/><ellipse cx="354" cy="43" rx="5.8" ry="4.2" fill="url(#lpG1)" transform="rotate(45 354 43)"/><ellipse cx="354" cy="43" rx="5.8" ry="4.2" fill="url(#lpG1)" transform="rotate(135 354 43)"/><circle cx="354" cy="43" r="3" fill="#F2E8FF"/></g>
+        <g opacity="0.92"><ellipse cx="366" cy="44" rx="6" ry="4.5" fill="url(#lpG3)" transform="rotate(10 366 44)"/><ellipse cx="366" cy="44" rx="6" ry="4.5" fill="url(#lpG3)" transform="rotate(100 366 44)"/><ellipse cx="366" cy="44" rx="6" ry="4.5" fill="url(#lpG3)" transform="rotate(190 366 44)"/><ellipse cx="366" cy="44" rx="6" ry="4.5" fill="url(#lpG3)" transform="rotate(280 366 44)"/><circle cx="366" cy="44" r="3.2" fill="#F0E4FF"/></g>
+        <g opacity="0.85"><ellipse cx="378" cy="42" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(-8 378 42)"/><ellipse cx="378" cy="42" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(82 378 42)"/><ellipse cx="378" cy="42" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(172 378 42)"/><ellipse cx="378" cy="42" rx="5.5" ry="4" fill="url(#lpG2)" transform="rotate(262 378 42)"/><circle cx="378" cy="42" r="2.8" fill="#EEE0FF"/></g>
+        <g opacity="0.75"><ellipse cx="389" cy="40" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(15 389 40)"/><ellipse cx="389" cy="40" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(105 389 40)"/><ellipse cx="389" cy="40" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(195 389 40)"/><ellipse cx="389" cy="40" rx="4.8" ry="3.4" fill="url(#lpG1)" transform="rotate(285 389 40)"/><circle cx="389" cy="40" r="2.4" fill="#F5EEFF"/></g>
+        <!-- sub clusters right -->
+        <g opacity="0.82"><ellipse cx="336" cy="52" rx="5" ry="3.6" fill="url(#lpG3)" transform="rotate(0 336 52)"/><ellipse cx="336" cy="52" rx="5" ry="3.6" fill="url(#lpG3)" transform="rotate(90 336 52)"/><ellipse cx="336" cy="52" rx="5" ry="3.6" fill="url(#lpG3)" transform="rotate(45 336 52)"/><ellipse cx="336" cy="52" rx="5" ry="3.6" fill="url(#lpG3)" transform="rotate(135 336 52)"/><circle cx="336" cy="52" r="2.6" fill="#F0E4FF"/></g>
+        <g opacity="0.72"><ellipse cx="326" cy="48" rx="4.2" ry="3" fill="url(#lpG1)" transform="rotate(20 326 48)"/><ellipse cx="326" cy="48" rx="4.2" ry="3" fill="url(#lpG1)" transform="rotate(110 326 48)"/><ellipse cx="326" cy="48" rx="4.2" ry="3" fill="url(#lpG1)" transform="rotate(200 326 48)"/><ellipse cx="326" cy="48" rx="4.2" ry="3" fill="url(#lpG1)" transform="rotate(290 326 48)"/><circle cx="326" cy="48" r="1.8" fill="#F5EEFF"/></g>
+        <g opacity="0.8"><ellipse cx="384" cy="52" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(-5 384 52)"/><ellipse cx="384" cy="52" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(85 384 52)"/><ellipse cx="384" cy="52" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(175 384 52)"/><ellipse cx="384" cy="52" rx="5" ry="3.6" fill="url(#lpG2)" transform="rotate(265 384 52)"/><circle cx="384" cy="52" r="2.6" fill="#EEE0FF"/></g>
+        <!-- buds right -->
+        <ellipse cx="382" cy="12" rx="2.8" ry="5" fill="#D4B8F0" transform="rotate(15 382 12)" opacity="0.6"/>
+        <ellipse cx="348" cy="24" rx="2.2" ry="4" fill="#C8A8E9" transform="rotate(-20 348 24)" opacity="0.5"/>
+
+        <!-- title text centered -->
+        <text x="210" y="85" text-anchor="middle" font-family="'Gowun Dodum', serif" font-size="13" fill="#7A6A9C" id="svgDate"></text>
+      </svg>
+  </div>
+
+  <div class="setup-card">
+    <div class="setup-title">✨ 오늘의 운세 시작하기</div>
+
+    <label class="setup-label">이름</label>
+    <input class="setup-input" id="inputName" type="text" placeholder="이름을 입력하세요 (예: Kelly)" value="Kelly"/>
+
+    <label class="setup-label">생년월일</label>
+    <input class="setup-input" id="inputBirth" type="date" value="1997-05-26"/>
+
+    <div class="api-note">
+      🔑 API 키는 <code>config.js</code> 파일에 저장되어 있어요.<br>
+      GitHub Secret으로 안전하게 관리됩니다.
+    </div>
+
+    <button class="btn" style="max-width:100%" onclick="startFortune()">🔮 운세 보기</button>
+  </div>
+</div>
+
+<!-- ══ MAIN SCREEN ══ -->
+<div class="wrap" id="mainScreen" style="display:none;">
   <div class="nfc-chip">🫧 NFC 태그됨</div>
 
-  <header>
+  <header style="width:100%">
     <div class="lilac-header-svg">
       <svg viewBox="0 0 420 160" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block; overflow:visible;">
         <defs>
@@ -378,20 +494,31 @@
         <ellipse cx="348" cy="24" rx="2.2" ry="4" fill="#C8A8E9" transform="rotate(-20 348 24)" opacity="0.5"/>
 
         <!-- title text centered -->
-        <text x="210" y="74" text-anchor="middle" font-family="'Noto Serif KR', serif" font-size="20" font-weight="700" fill="#3A2A5C">Kelly님의 오늘의 운세</text>
-        <text x="210" y="96" text-anchor="middle" font-family="'Gowun Dodum', serif" font-size="13" fill="#7A6A9C" id="svgDate"></text>
+        <text x="210" y="85" text-anchor="middle" font-family="'Gowun Dodum', serif" font-size="13" fill="#7A6A9C" id="svgDate"></text>
       </svg>
     </div>
-    <p id="todayDate" style="display:none;"></p>
   </header>
 
-  <div class="date-badge" id="lunarDate">로딩 중...</div>
-  <!-- Main fortune card -->
+  <div class="date-badge" id="lunarDate">✨ 오늘의 운세 카드</div>
+
+  <!-- Loading -->
+  <div class="loading-card" id="loadingCard">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">AI가 오늘의 운세를 읽고 있어요...<br>잠시만 기다려주세요 🌸</div>
+  </div>
+
+  <!-- Fortune card (AI) -->
   <div class="card hidden" id="mainCard">
-    <div class="fortune-category" id="fortuneCategory">🌟 오늘의 한마디</div>
+    <div class="fortune-category" id="fortuneCategory">🌟 오늘의 운세</div>
     <div class="star-row" id="starRow"></div>
-    <div class="fortune-title" id="fortuneTitle">운세를 불러오는 중...</div>
+    <div class="fortune-title" id="fortuneTitle"></div>
     <div class="fortune-body" id="fortuneBody"></div>
+  </div>
+
+  <!-- Lotto card -->
+  <div class="lotto-card hidden" id="lottoCard">
+    <div class="lotto-label">🍀 오늘의 행운 로또 번호</div>
+    <div class="lotto-balls" id="lottoBalls"></div>
   </div>
 
   <!-- Mini cards -->
@@ -401,122 +528,26 @@
       <div class="mini-card-value" id="mcLunch">-</div>
     </div>
     <div class="mini-card hidden" id="mc2">
-      <div class="mini-card-label">🔢 행운의 숫자</div>
-      <div class="mini-card-value" id="mcNumber">-</div>
-    </div>
-    <div class="mini-card hidden" id="mc3">
       <div class="mini-card-label">🎨 행운의 색</div>
       <div class="mini-card-value" id="mcColor">-</div>
     </div>
-    <div class="mini-card hidden" id="mc4">
+    <div class="mini-card hidden" id="mc3">
       <div class="mini-card-label">⏰ 행운의 시간</div>
       <div class="mini-card-value" id="mcTime">-</div>
     </div>
+    <div class="mini-card hidden" id="mc4">
+      <div class="mini-card-label">👤 오늘의 나</div>
+      <div class="mini-card-value" id="mcMe">-</div>
+    </div>
   </div>
 
-  <button class="btn" id="rerollBtn" onclick="reroll()">🎲 다시 뽑기</button>
-
+  <button class="btn" id="rerollBtn" onclick="reroll()">🎲 오늘의 운세 다시 뽑기</button>
+  <button class="btn-sm" onclick="goSetup()">⚙ 설정 변경</button>
 </div>
 
+<script src="config.js"></script>
 <script>
-const fortunes = [
-  { cat:"🌟 오늘의 기운", stars:5, title:"최고의 하루가 펼쳐질 예감!", body:"오늘은 모든 것이 술술 풀리는 날! 망설이지 말고 먼저 연락해보세요. 상대방도 당신 생각을 하고 있답니다." },
-  { cat:"☀️ 행운의 메시지", stars:5, title:"당신에게 좋은 일이 생깁니다", body:"오늘 길을 걷다가 100원짜리를 발견할 수도 있어요. 작은 행운이 큰 기쁨이 되는 하루입니다." },
-  { cat:"🌙 오늘의 조언", stars:3, title:"잠깐, 오늘은 충동구매 주의!", body:"할인 알림이 울려도 카트에 담기만 하고 하루 기다려봐요. 내일이면 사고 싶지 않을 거예요 (아마도)." },
-  { cat:"💫 운세 예언", stars:4, title:"뜻밖의 연락이 올 수 있어요", body:"오래 연락 못 했던 사람에게서 메시지가 올 수 있어요. 반갑게 답장해 주세요, 좋은 인연이 이어질 거예요!" },
-  { cat:"🌈 오늘의 기운", stars:5, title:"오늘 당신은 주인공!", body:"오늘 하루, 당신의 매력이 MAX치로 발산됩니다. 셀카 찍기 딱 좋은 날이에요. 각도 잘 잡으면 인생샷 완성!" },
-  { cat:"🍀 행운의 메시지", stars:4, title:"노력이 빛을 발하는 날", body:"꾸준히 해온 일들이 드디어 인정받을 시간이 왔어요. 오늘은 결과보다 과정을 즐겨봐요." },
-  { cat:"⭐ 오늘의 조언", stars:2, title:"오늘은 집순이/집돌이 모드 ON", body:"밖에 나가면 괜히 지갑이 열릴 것 같은 날. 집에서 유튜브 보며 쉬는 게 최선의 선택일 수 있어요." },
-  { cat:"🌸 운세 예언", stars:5, title:"카페인이 오늘의 행운을 부릅니다", body:"오늘 아침 커피 한 잔이 하루를 180도 바꿔줄 거예요. 아직 안 마셨다면 지금 당장 마시러 가세요!" },
-  { cat:"✨ 오늘의 기운", stars:3, title:"신중하게, 그러나 포기하지 말고!", body:"오늘은 결정을 서두르기보다 한 발짝 물러서서 생각해보는 게 좋아요. 내일은 더 명확하게 보일 거예요." },
-  { cat:"🌟 행운의 메시지", stars:4, title:"오늘 맛있는 거 먹으면 살 안 찜", body:"(과학적 근거는 없지만) 오늘만큼은 먹고 싶은 거 다 먹어도 될 것 같은 기운이에요. 삶의 질이 곧 운세랍니다." },
-  { cat:"💎 오늘의 조언", stars:5, title:"당신의 아이디어가 빛나는 날", body:"오늘 떠오른 아이디어, 그냥 흘려보내지 마세요. 메모 앱에 기록해두면 나중에 큰 도움이 될 거예요." },
-  { cat:"🦋 운세 예언", stars:3, title:"갑자기 음악이 귓가를 맴돌 것", body:"오늘 하루 이유 없이 노래 하나가 머릿속에서 계속 재생될 거예요. 그 노래의 가사가 오늘의 힌트!" },
-  { cat:"🌺 오늘의 기운", stars:4, title:"좋은 뉴스가 들려올 예감", body:"오늘 기다리던 소식이 올 수 있어요. 핸드폰을 자주 확인하게 될 것 같지만, 침착하게 기다려봐요." },
-  { cat:"🎯 행운의 메시지", stars:5, title:"오늘은 도전하면 다 됩니다", body:"평소에 주저하던 일이 있나요? 오늘만큼은 용기를 내봐요. 우주가 당신 편이에요 (진짜로)." },
-  { cat:"🌙 오늘의 조언", stars:2, title:"졸음 주의보 발령!", body:"오늘따라 유독 눈이 무거운 날. 점심 후 10분 낮잠이 오후 생산성을 세 배로 높여줄 거예요. 알람 맞추는 거 잊지 마요!" },
-  { cat:"🔥 운세 예언", stars:4, title:"오늘 누군가 당신을 몰래 칭찬 중", body:"뒤에서 \"진짜 잘한다\"라며 당신을 칭찬하는 사람이 분명 있어요. 모르는 척 해주세요 (흐뭇)." },
-  { cat:"🍭 오늘의 기운", stars:5, title:"달달한 것이 행운을 부릅니다", body:"오늘 단 것을 먹으면 기분이 UP됩니다. 초콜릿, 캐러멜 라떼, 마카롱 중 하나를 선택해보세요!" },
-  { cat:"🌊 행운의 메시지", stars:3, title:"흐름을 타세요, 억지로 밀지 말고", body:"오늘은 일이 잘 안 풀려도 억지로 해결하려 하지 마요. 때로는 쉬어가는 것도 전략이랍니다." },
-  { cat:"🎪 오늘의 조언", stars:4, title:"웃음이 행운의 시작입니다", body:"오늘 처음 만나는 사람에게 먼저 웃어봐요. 그 웃음이 예상치 못한 좋은 인연을 만들어줄 거예요." },
-  { cat:"🌠 운세 예언", stars:5, title:"오늘은 소원이 이루어지는 날!", body:"자기 전에 진심으로 소원을 빌어보세요. 작은 소원부터 하나씩, 오늘이 그 시작이 될 거예요." },
-  { cat:"🐣 오늘의 기운", stars:4, title:"새로운 시작을 알리는 날", body:"무언가를 시작하기 딱 좋은 기운이에요. 배우고 싶었던 것, 만들고 싶었던 것, 오늘이 바로 그 첫 날!" },
-  { cat:"🎵 행운의 메시지", stars:3, title:"음악과 함께라면 뭐든 OK", body:"오늘 업무나 공부할 때 좋아하는 플레이리스트를 틀어보세요. 집중력이 두 배가 될 거예요." },
-  { cat:"🌻 오늘의 조언", stars:5, title:"당신 주변에 좋은 사람이 가득해요", body:"오늘만큼은 소중한 사람에게 연락해봐요. '잘 지내?'라는 짧은 한마디가 그들에게 큰 힘이 될 거예요." },
-  { cat:"💡 운세 예언", stars:4, title:"번뜩이는 아이디어의 날", body:"오늘 화장실에서, 혹은 자려고 누웠을 때 갑자기 좋은 생각이 날 수 있어요. 메모 준비 하세요!" },
-  { cat:"🦊 오늘의 기운", stars:3, title:"약삭빠르게 움직이는 것이 관건", body:"오늘은 눈치와 센스가 빛나는 날. 먼저 말하기보다 잘 듣고 판단하면 좋은 결과가 따라올 거예요." },
-  { cat:"🍀 행운의 메시지", stars:5, title:"로또 한 장... 어떨까요? (농담 아님)", body:"오늘 유난히 숫자 운이 좋아 보이는 날. 작은 도전이 큰 행운을 부를 수 있어요!" },
-  { cat:"🌷 오늘의 조언", stars:4, title:"예쁜 것을 보면 기분이 좋아져요", body:"오늘은 꽃집 앞을 지나거나, 예쁜 카페에 들러보세요. 시각적 행복이 하루 전체를 바꿔줄 거예요." },
-  { cat:"🎠 운세 예언", stars:3, title:"오늘의 선택이 내일을 만듭니다", body:"아주 작은 결정이라도 오늘은 신중하게! 점심 메뉴 하나도 인생의 터닝포인트가 될 수 있어요 (진짜로)." },
-  { cat:"🌈 오늘의 기운", stars:5, title:"모든 일이 계획대로 흘러가요", body:"오늘은 뭘 해도 척척 맞아 떨어지는 날! 이 기운을 놓치지 마세요. 하고 싶은 것 다 도전!" },
-  { cat:"🐝 행운의 메시지", stars:4, title:"부지런한 자에게 복이 와요", body:"오늘 조금만 더 부지런히 움직여봐요. 작은 노력들이 쌓여서 나중에 큰 보상으로 돌아올 거예요." },
-  { cat:"🎋 오늘의 조언", stars:3, title:"무리하지 말고 천천히", body:"오늘은 욕심부리지 않고 내 페이스대로 가는 게 최고의 전략. 토끼보다 거북이가 되는 날이에요." },
-  { cat:"🌙 운세 예언", stars:4, title:"밤에 좋은 꿈을 꿀 거예요", body:"오늘 밤 잠들기 전에 좋은 생각만 하고 자면 달콤한 꿈을 꿀 거예요. 행복한 상상으로 하루를 마무리해요!" },
-  { cat:"✨ 오늘의 기운", stars:5, title:"당신의 센스가 빛나는 날", body:"오늘은 패션도, 말도, 행동도 모두 센스 있게 느껴지는 날이에요. 자신감을 가지세요!" },
-  { cat:"🍊 행운의 메시지", stars:4, title:"비타민C가 오늘의 행운 아이템", body:"오늘 귤이나 오렌지주스 한 잔이 행운을 부릅니다. 건강도 챙기고 운도 챙기는 일석이조!" },
-  { cat:"🦜 오늘의 조언", stars:3, title:"말이 씨가 되는 날", body:"오늘은 특히 긍정적인 말을 많이 해봐요. '잘 될 거야', '할 수 있어' - 이런 말들이 진짜가 될 거예요." },
-  { cat:"🌸 운세 예언", stars:5, title:"예상치 못한 선물이 찾아옵니다", body:"누군가 당신에게 작은 선물이나 호의를 베풀 수 있어요. 감사히 받고 나중에 돌려주면 인연이 깊어져요!" },
-  { cat:"🎯 오늘의 기운", stars:4, title:"집중력이 폭발하는 날", body:"오늘은 유독 집중이 잘 되는 날. 미뤄뒀던 일, 어렵던 과제를 오늘 처리해버리세요. 완벽한 타이밍!" },
-  { cat:"🌊 행운의 메시지", stars:3, title:"쉬어가도 괜찮아요", body:"오늘은 아무것도 안 해도 되는 날. 그냥 멍하니 있어도 돼요. 충전도 일의 일부랍니다." },
-  { cat:"🦋 오늘의 조언", stars:4, title:"변화를 두려워하지 마세요", body:"뭔가 바꾸고 싶었던 게 있나요? 헤어스타일, 방 배치, 루틴... 오늘이 딱 좋은 시작점이에요!" },
-  { cat:"⚡ 운세 예언", stars:5, title:"에너지가 넘치는 날입니다!", body:"오늘 유난히 몸이 가볍고 기분이 좋다면 그게 다 운세 덕분이에요. 이 에너지로 하고 싶던 거 다 해봐요!" },
-  { cat:"🌺 오늘의 기운", stars:4, title:"인간관계 운이 UP!", body:"오늘은 사람을 만나기 좋은 날. 모임이 있다면 적극적으로 참여해봐요. 좋은 인연이 기다리고 있어요." },
-  { cat:"🍵 행운의 메시지", stars:3, title:"차 한 잔의 여유가 필요해요", body:"오늘 바쁘더라도 잠깐 멈추고 따뜻한 차 한 잔 마시며 쉬어봐요. 그 잠깐의 여유가 오후를 살려줄 거예요." },
-  { cat:"🌟 오늘의 조언", stars:5, title:"당신은 충분히 잘하고 있어요", body:"오늘 혹시 자신감이 떨어진다면, 이 운세를 다시 읽어봐요. 당신 정말 잘하고 있답니다. 진심으로요!" },
-  { cat:"🎪 운세 예언", stars:4, title:"재미있는 일이 갑자기 생겨요", body:"예상치 못한 재미있는 제안이 올 수 있어요. 처음엔 귀찮을 것 같아도 가봐요. 후회 없을 거예요!" },
-  { cat:"🌙 오늘의 기운", stars:3, title:"조용한 하루가 행복한 하루", body:"오늘은 화려하진 않지만 따뜻하고 평온한 하루가 될 거예요. 소소한 행복을 발견하는 눈을 키워봐요." },
-  { cat:"🎨 행운의 메시지", stars:5, title:"창의력이 폭발하는 날!", body:"오늘 뭔가 만들거나 표현하고 싶은 욕구가 생길 거예요. 그 에너지를 흘려보내지 말고 뭔가를 만들어봐요!" },
-  { cat:"🦁 오늘의 조언", stars:4, title:"용기 있는 자가 기회를 잡아요", body:"오늘만큼은 먼저 나서봐요. 발표, 제안, 고백... 망설임이 기회를 놓치게 해요. 파이팅!" },
-  { cat:"🌈 운세 예언", stars:3, title:"오늘 하늘을 꼭 올려다보세요", body:"예쁜 구름이나 노을을 보면 그날 하루가 특별해진다고 해요. 잠깐 하늘 한번 봐봐요!" },
-  { cat:"🍡 오늘의 기운", stars:5, title:"달콤한 하루가 펼쳐집니다", body:"오늘은 모든 것이 달콤하게 느껴지는 날. 맛있는 것도 먹고, 좋아하는 것도 하고 힐링 모드로 가봐요!" },
-  { cat:"💫 행운의 메시지", stars:4, title:"별이 당신을 응원합니다", body:"밤하늘의 별 하나가 오늘 당신만을 위해 빛나고 있어요. 자기 전에 창문 밖 별 하나를 찾아봐요." },
-  { cat:"🎵 오늘의 조언", stars:3, title:"이어폰을 꽂으면 세상이 달라져요", body:"오늘 걸어다닐 때 좋아하는 노래 틀어봐요. 같은 길도 완전히 다른 느낌으로 다가올 거예요." },
-  { cat:"🌻 운세 예언", stars:5, title:"오늘의 노력, 미래의 나에게 선물!", body:"힘들어도 오늘 조금만 더 해봐요. 한 달 뒤의 당신이 오늘의 당신에게 고마워할 거예요." },
-  { cat:"🦩 오늘의 기운", stars:4, title:"우아하게, 나답게!", body:"오늘은 남들 신경 쓰지 말고 내 페이스대로 가요. 있는 그대로의 당신이 가장 매력적이랍니다." },
-  { cat:"🌴 행운의 메시지", stars:3, title:"여행 생각이 자꾸 나는 날", body:"오늘 여행 사진 하나를 배경화면으로 설정해봐요. 언젠간 꼭 가게 될 거예요. 꿈은 이루어진답니다!" },
-  { cat:"🎭 오늘의 조언", stars:4, title:"오늘은 내가 주인공인 영화", body:"하루를 영화처럼 살아봐요. 극적인 BGM과 함께 (마음 속으로). 일상이 특별해지는 마법이에요." },
-  { cat:"🌊 운세 예언", stars:5, title:"파도처럼 좋은 기운이 밀려옵니다", body:"오늘 기분 좋은 일들이 파도처럼 연달아 찾아올 거예요. 서핑하듯 그 기운을 즐겨봐요!" },
-  { cat:"🍕 오늘의 기운", stars:4, title:"맛있는 것을 먹으면 만사 OK", body:"오늘 점심을 맛있게 먹으면 오후가 훨씬 잘 풀릴 거예요. 음식이 곧 행운의 시작이에요!" },
-  { cat:"🌷 행운의 메시지", stars:3, title:"천천히 피는 꽃이 더 오래가요", body:"오늘 느리게 가도 괜찮아요. 급하게 피는 꽃보다 천천히 피는 꽃이 더 오래 향기로운 법이에요." },
-  { cat:"🏄 오늘의 조언", stars:5, title:"오늘만큼은 NO라고 말해봐요", body:"싫은 것에 NO, 좋은 것에 YES. 오늘은 내 감정에 솔직한 날로 만들어봐요. 경계 설정도 능력이에요!" },
-  { cat:"🎠 운세 예언", stars:4, title:"뜻밖의 장소에서 행운을 발견", body:"오늘 평소에 가지 않던 길로 가봐요. 새로운 카페, 가게, 풍경... 뜻밖의 발견이 기다리고 있어요." },
-  { cat:"🌟 오늘의 기운", stars:5, title:"당신의 웃음이 세상을 밝혀요", body:"오늘 당신이 웃으면 주변 사람들도 덩달아 행복해지는 날. 당신의 미소가 최고의 아이템이에요!" },
-  { cat:"🐱 행운의 메시지", stars:3, title:"고양이를 보면 행운이 찾아와요", body:"오늘 길에서 고양이를 만나면 굉장히 좋은 일이 생길 거예요. 강아지도 OK, 그냥 귀여운 거 보면 돼요!" },
-  { cat:"🌙 오늘의 조언", stars:4, title:"오늘 밤 일찍 자면 내일이 달라져요", body:"충분한 수면이 내일의 행운을 준비하는 가장 좋은 방법. 오늘은 좀 일찍 자봐요. 내일을 위해서!" },
-  { cat:"🎯 운세 예언", stars:5, title:"목표를 향해 직진할 타이밍!", body:"오늘은 핑계를 만들지 말고 그냥 해봐요. 완벽한 준비보다 일단 시작하는 게 더 중요한 날이에요." },
-  { cat:"🌸 오늘의 기운", stars:4, title:"봄바람 같은 기운이 찾아와요", body:"오늘 어딘가 설레는 느낌이 든다면, 그 감각을 따라가봐요. 설렘이 곧 행운의 신호랍니다." },
-  { cat:"🍀 행운의 메시지", stars:3, title:"세 번째 도전에서 성공할 거예요", body:"오늘 무언가 잘 안 돼도 포기하지 마요. 정확히 세 번째에 될 거예요. 실험해봐요!" },
-  { cat:"🦋 오늘의 조언", stars:5, title:"당신은 변화 중입니다, 좋은 방향으로", body:"지금 힘든 게 있다면 그건 성장통이에요. 나비가 되기 전 번데기처럼, 당신도 멋지게 날아오를 거예요." },
-  { cat:"⚡ 운세 예언", stars:4, title:"오늘 결정한 것은 반드시 이루어져요", body:"오늘 마음먹은 것이 있다면 흔들리지 마요. 오늘의 결심은 특히 강한 힘을 가지고 있답니다." },
-  { cat:"🌺 오늘의 기운", stars:3, title:"향기로운 것이 기분을 살려줘요", body:"오늘 좋아하는 향수를 뿌리거나, 좋은 향이 나는 커피나 차를 마셔봐요. 향기가 운을 부릅니다." },
-  { cat:"🎨 행운의 메시지", stars:5, title:"오늘 사진 찍으면 다 잘 나와요", body:"빛이 잘 드는 날! 오늘 사진 남겨두고 싶은 순간들을 놓치지 마요. 나중에 보면 완전 잘 나왔을 거예요." },
-  { cat:"🌊 오늘의 조언", stars:4, title:"물을 많이 마시면 행운도 쑥쑥", body:"오늘은 물을 자주 마셔봐요. 수분 보충이 집중력과 기분을 높여주고, 그게 바로 오늘의 행운이에요!" },
-  { cat:"🦊 운세 예언", stars:3, title:"눈치 빠른 당신, 오늘 특히 더!", body:"오늘은 상황 파악을 잘 하는 날. 말하지 않아도 분위기를 읽는 당신의 능력이 빛을 발할 거예요." },
-  { cat:"🌈 오늘의 기운", stars:5, title:"무지개 뜨는 날의 기운!", body:"오늘 하루 내내 무지개처럼 다채롭고 아름다운 순간들이 펼쳐질 거예요. 눈 크게 뜨고 누려봐요!" },
-  { cat:"🍰 행운의 메시지", stars:4, title:"케이크 없어도 오늘이 생일 같아요", body:"오늘은 특별한 이유 없이 행복한 날. 그냥 존재하는 것만으로도 충분히 축하받을 자격이 있어요!" },
-  { cat:"🌙 오늘의 조언", stars:3, title:"달이 뜨면 생각이 정리돼요", body:"오늘 밤 달을 보면서 한 가지 고민만 생각해봐요. 달빛 아래서 답이 보일 거예요." },
-  { cat:"🎵 운세 예언", stars:5, title:"신나는 일이 터질 것 같은 날!", body:"왠지 모르게 기분이 업되는 날이에요. 그 에너지 그대로 오늘 하루 신나게 보내봐요!" },
-  { cat:"🌻 오늘의 기운", stars:4, title:"태양처럼 밝은 에너지!", body:"오늘 당신의 에너지가 주변을 밝게 만들어요. 팀원들, 친구들, 가족들... 모두가 당신 덕에 기분 좋아질 거예요." },
-  { cat:"🦄 행운의 메시지", stars:5, title:"오늘은 마법 같은 일이 생겨요", body:"어딘가 비현실적인 좋은 일이 생길 것 같은 날이에요. 기대해봐요, 정말로 마법 같은 하루가 될 거예요!" },
-  { cat:"🎪 오늘의 조언", stars:3, title:"SNS 잠깐 내려놔봐요", body:"오늘 한 시간만 SNS를 안 보면 생산성이 두 배! 오프라인의 행복이 온라인보다 훨씬 달콤하답니다." },
-  { cat:"🌸 운세 예언", stars:4, title:"기다리던 답장이 올 수도 있어요", body:"핸드폰을 계속 보게 되는 날이에요. 기다리는 연락이 오늘 올 수 있으니 배터리 충전 잘 해두세요!" },
-  { cat:"🏡 오늘의 기운", stars:3, title:"집이 가장 편안한 아지트", body:"오늘은 집에 있고 싶은 날. 집순이/집돌이 모드도 때론 필요해요. 내 공간에서 충전하는 것도 행복이에요." },
-  { cat:"🌟 행운의 메시지", stars:5, title:"오늘 하루, 당신은 최고예요", body:"무슨 일이 있어도, 어떤 결과가 나와도 오늘의 당신은 정말 잘했어요. 스스로를 칭찬해줘요!" },
-  { cat:"🍜 오늘의 조언", stars:4, title:"따뜻한 국물이 만사를 해결해요", body:"오늘 몸도 마음도 따뜻하게 해줄 국물 요리 하나 먹어봐요. 라면도 OK, 된장찌개도 OK, 뭐든 OK!" },
-  { cat:"🦋 운세 예언", stars:3, title:"오늘 만난 사람이 중요한 인연일 수도", body:"오늘 처음 만나는 사람이나 오랜만에 보는 사람에게 좀 더 신경 써봐요. 소중한 인연이 될 수 있어요." },
-  { cat:"🎯 오늘의 기운", stars:5, title:"딱 오늘이 기회예요!", body:"망설이고 있는 게 있나요? 오늘이 딱 그걸 실행할 날이에요. 나중에 하지 말고 오늘 바로 GO!" },
-  { cat:"🌊 행운의 메시지", stars:4, title:"잔잔하지만 꾸준한 것이 이겨요", body:"오늘 화려하진 않지만 꾸준히 한 발씩 나아가는 하루를 만들어봐요. 그게 진짜 실력이에요." },
-  { cat:"🌺 오늘의 조언", stars:3, title:"예쁜 노트에 오늘을 기록해봐요", body:"오늘 있었던 좋은 일 세 가지를 적어봐요. 쓰다 보면 생각보다 많다는 걸 알게 될 거예요!" },
-  { cat:"🐝 운세 예언", stars:5, title:"부지런한 당신에게 꿀이 쏟아져요", body:"오늘 열심히 하면 달콤한 결실이 따라와요. 꿀벌처럼 부지런하게, 하지만 즐겁게 움직여봐요!" },
-  { cat:"🌙 오늘의 기운", stars:4, title:"달빛처럼 은은하게 빛나는 날", body:"오늘 당신의 매력은 화려하기보다는 은은하고 깊어요. 그 은근한 매력이 오늘 누군가의 마음을 움직일 거예요." },
-  { cat:"🎨 행운의 메시지", stars:3, title:"낙서가 스트레스를 날려줘요", body:"오늘 잠깐 아무 낙서나 해봐요. 그림이 아니어도 돼요. 그냥 끄적이는 것만으로도 머릿속이 정리돼요." },
-  { cat:"🍃 오늘의 조언", stars:5, title:"자연이 당신을 치유해줘요", body:"오늘 잠깐이라도 나무나 풀을 보러 나가봐요. 공원 산책 10분이 커피보다 더 강력한 에너지를 줄 거예요." },
-  { cat:"🌠 운세 예언", stars:4, title:"소원 말하면 이루어지는 날", body:"오늘은 소원을 크게 소리 내어 말해봐요. 부끄럽더라도! 말로 꺼내면 꿈에 한 걸음 더 가까워진답니다." },
-];
-
 const lunches = ["김치찌개 🍲","된장찌개 🫕","비빔밥 🥗","불고기 정식 🥩","삼겹살 구이 🥓","냉면 🍜","짜장면 🍝","짬뽕 🍜","순두부찌개 🥘","갈비탕 🍲","떡볶이 🌶️","순대국밥 🫕","칼국수 🍜","쌀국수 🍜","마라탕 🌶️","초밥 🍣","라멘 🍜","파스타 🍝","샌드위치 🥪","샐러드 🥗","치킨 🍗","피자 🍕","버거 🍔","제육볶음 🥘","오므라이스 🍳","카레 🍛","덮밥 🍚","타코 🌮","아보카도 토스트 🥑","훠궈 🍲"];
-
-const numbers = ["3","7","11","13","21","27","42","77","88","99","4","8","14","23","36","48","55","63","72","81","5","9","17","29","33","47","56","68","74","86"];
 
 const colors = [
   { name:"라벤더 퍼플", hex:"#C9B8FF" },
@@ -528,33 +559,17 @@ const colors = [
   { name:"라일락", hex:"#DDA0DD" },
   { name:"터콰이즈", hex:"#40E0D0" },
   { name:"로즈 골드", hex:"#F4A0A0" },
-  { name:"아이스 블루", hex:"#B8E0FF" },
   { name:"세이지 그린", hex:"#9DC88D" },
   { name:"버터 옐로우", hex:"#FFF3A3" },
-  { name:"코코아 브라운", hex:"#C4956A" },
   { name:"포레스트 그린", hex:"#6BAF92" },
-  { name:"버건디", hex:"#C75B7A" },
 ];
-
-const times = ["오전 9시","오전 10시","오전 11시","정오 12시","오후 1시","오후 2시","오후 3시","오후 4시","오후 5시","오후 6시","오후 7시","오후 8시","오후 9시","오전 7시","오전 8시"];
-
+const times = ["오전 9시","오전 10시","오전 11시","정오 12시","오후 1시","오후 2시","오후 3시","오후 4시","오후 5시","오후 6시","오후 7시","오후 8시"];
+const meWords = ["매력 폭발", "집중력 UP", "센스 장인", "분위기 메이커", "행운아", "에너지 충전", "힐링 모드", "카리스마", "감성 충만", "아이디어 뱅크"];
 const bgDecos = ['🌸','✦','⋆','˚','✧','·','🫧','💧','🌿','°','⁎','✩','❋','🐚'];
 
-function seededRandom(seed) {
-  let s = seed;
-  return function() {
-    s = (s * 1664525 + 1013904223) & 0xffffffff;
-    return (s >>> 0) / 0x100000000;
-  };
-}
-
-function getDailySeed() {
-  const now = new Date();
-  return now.getFullYear() * 10000 + (now.getMonth()+1) * 100 + now.getDate();
-}
-
-let currentSeed = getDailySeed();
-let rerollCount = 0;
+let userName = 'Kelly';
+let userBirth = '';
+let apiKey = '';
 
 function buildBg() {
   const deco = document.getElementById('bgDeco');
@@ -570,83 +585,182 @@ function buildBg() {
   }
 }
 
-function pickFortune(useRandom) {
-  const rng = useRandom
-    ? () => Math.random()
-    : (() => { const r = seededRandom(currentSeed); return () => r(); })();
-  const f = fortunes[Math.floor(rng() * fortunes.length)];
-  const lunch = lunches[Math.floor(rng() * lunches.length)];
-  const num = numbers[Math.floor(rng() * numbers.length)];
-  const col = colors[Math.floor(rng() * colors.length)];
-  const time = times[Math.floor(rng() * times.length)];
-  return { f, lunch, num, col, time };
-}
-
-function renderStars(n) {
-  return Array.from({length:5}, (_,i) => `<span class="star">${i < n ? '⭐' : '🌑'}</span>`).join('');
-}
-
 function setDate() {
   const d = new Date();
   const days = ['일','월','화','수','목','금','토'];
-  const dateStr = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]}요일)`;
-  const el = document.getElementById('todayDate');
-  if (el) el.textContent = dateStr;
-  const svgDate = document.getElementById('svgDate');
-  if (svgDate) svgDate.textContent = dateStr;
-  document.getElementById('lunarDate').textContent = '✨ 오늘의 운세 카드';
+  const dateStr = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
+  const svgEls = document.querySelectorAll('#svgDate');
+  svgEls.forEach(el => el.textContent = dateStr);
 }
 
-function showFortune(animate, useRandom) {
-  const { f, lunch, num, col, time } = pickFortune(useRandom);
-  const mainCard = document.getElementById('mainCard');
-  const mcs = ['mc1','mc2','mc3','mc4'].map(id => document.getElementById(id));
-
-  if (animate) {
-    mainCard.classList.add('hidden');
-    mcs.forEach(m => m.classList.add('hidden'));
-  }
-
-  setTimeout(() => {
-    document.getElementById('fortuneCategory').textContent = f.cat;
-    document.getElementById('starRow').innerHTML = renderStars(f.stars);
-    document.getElementById('fortuneTitle').textContent = f.title;
-    document.getElementById('fortuneBody').textContent = f.body;
-
-    document.getElementById('mcLunch').textContent = lunch;
-    document.getElementById('mcNumber').textContent = num;
-    const colorDot = `<span class="color-dot" style="background:${col.hex}"></span>`;
-    document.getElementById('mcColor').innerHTML = col.name + colorDot;
-    document.getElementById('mcTime').textContent = time;
-
-    setTimeout(() => {
-      mainCard.classList.remove('hidden');
-      mcs.forEach((m, i) => {
-        setTimeout(() => m.classList.remove('hidden'), i * 80);
-      });
-    }, animate ? 200 : 0);
-  }, animate ? 200 : 0);
+function renderStars(n) {
+  return Array.from({length:5}, (_,i) =>
+    `<span class="star">${i < n ? '⭐' : '🌑'}</span>`).join('');
 }
 
-function reroll() {
-  showFortune(true, true);
-  const btn = document.getElementById('rerollBtn');
-  btn.textContent = '🎲 다시 뽑기';
+function getLottoColor(n) {
+  if (n <= 10) return 'r1';
+  if (n <= 20) return 'r2';
+  if (n <= 30) return 'r3';
+  if (n <= 40) return 'r4';
+  return 'r5';
 }
 
-function init() {
-  buildBg();
-  setDate();
-  showFortune(false);
-  setTimeout(() => {
+function renderLotto(numbers) {
+  const balls = document.getElementById('lottoBalls');
+  balls.innerHTML = numbers.map(n =>
+    `<div class="ball ${getLottoColor(n)}">${n}</div>`
+  ).join('');
+}
+
+function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function fillMiniCards() {
+  const lunch = pickRandom(lunches);
+  const col = pickRandom(colors);
+  const time = pickRandom(times);
+  const me = pickRandom(meWords);
+  document.getElementById('mcLunch').textContent = lunch;
+  const colorDot = `<span class="color-dot" style="background:${col.hex}"></span>`;
+  document.getElementById('mcColor').innerHTML = col.name + colorDot;
+  document.getElementById('mcTime').textContent = time;
+  document.getElementById('mcMe').textContent = me;
+}
+
+function showCards(aiResult) {
+  // Parse AI response
+  let title = '', body = '', stars = 4, lotto = [];
+  try {
+    const t = aiResult.title || '';
+    const b = aiResult.body || '';
+    const s = parseInt(aiResult.stars) || 4;
+    const l = aiResult.lotto || [];
+    title = t; body = b; stars = Math.min(5, Math.max(1, s)); lotto = l;
+  } catch(e) {}
+
+  document.getElementById('fortuneCategory').textContent = '🔮 AI 오늘의 운세';
+  document.getElementById('starRow').innerHTML = renderStars(stars);
+  document.getElementById('fortuneTitle').textContent = title;
+  document.getElementById('fortuneBody').textContent = body;
+
+  renderLotto(lotto);
+  fillMiniCards();
+
+  document.getElementById('loadingCard').style.display = 'none';
+  document.getElementById('mainCard').classList.remove('hidden');
+  document.getElementById('lottoCard').classList.remove('hidden');
+  ['mc1','mc2','mc3','mc4'].forEach((id, i) => {
+    setTimeout(() => document.getElementById(id).classList.remove('hidden'), i * 80 + 100);
+  });
+  document.getElementById('rerollBtn').disabled = false;
+}
+
+function resetCards() {
+  document.getElementById('mainCard').classList.add('hidden');
+  document.getElementById('lottoCard').classList.add('hidden');
+  ['mc1','mc2','mc3','mc4'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  document.getElementById('loadingCard').style.display = 'block';
+  document.getElementById('rerollBtn').disabled = true;
+}
+
+async function fetchFortune() {
+  const d = new Date();
+  const today = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${['일','월','화','수','목','금','토'][d.getDay()]}요일)`;
+
+  const birthStr = userBirth
+    ? (() => { const b = new Date(userBirth); return `${b.getFullYear()}년 ${b.getMonth()+1}월 ${b.getDate()}일생`; })()
+    : '생년월일 미입력';
+
+  const age = userBirth
+    ? (() => { const b = new Date(userBirth); const now = new Date(); let a = now.getFullYear() - b.getFullYear(); if (now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) a--; return a; })()
+    : '';
+
+  const prompt = `당신은 재미있고 긍정적인 운세 점술사입니다. 아래 정보를 바탕으로 오늘의 운세를 작성해주세요.
+
+이름: ${userName}
+생년월일: ${birthStr}${age ? ` (만 ${age}세)` : ''}
+오늘 날짜: ${today}
+
+다음 JSON 형식으로만 응답하세요 (다른 텍스트 없이):
+{
+  "title": "오늘 운세 한 줄 제목 (20자 이내, 재미있고 공감가게)",
+  "body": "오늘의 운세 설명 (80~120자, ${userName}님에게 맞춘 따뜻하고 재미있는 운세. 생년월일 기반 기운 언급)",
+  "stars": 별점 숫자 (1~5),
+  "lotto": [로또번호 6개 숫자 배열, 1~45 사이 중복없이]
+}`;
+
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.9, maxOutputTokens: 512 }
+    })
+  });
+
+  if (!res.ok) throw new Error('API 오류: ' + res.status);
+  const data = await res.json();
+  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const jsonStr = raw.replace(/```json|```/g, '').trim();
+  return JSON.parse(jsonStr);
+}
+
+async function loadFortune() {
+  resetCards();
+  document.getElementById('loadingText').innerHTML = `${userName}님의 오늘 운세를 AI가 읽고 있어요...<br>잠시만 기다려주세요 🌸`;
+  try {
+    const result = await fetchFortune();
+    showCards(result);
+  } catch(e) {
+    document.getElementById('loadingCard').style.display = 'none';
     document.getElementById('mainCard').classList.remove('hidden');
-    ['mc1','mc2','mc3','mc4'].forEach((id, i) => {
-      setTimeout(() => document.getElementById(id).classList.remove('hidden'), i * 100 + 200);
-    });
-  }, 400);
+    document.getElementById('fortuneCategory').textContent = '⚠️ 오류';
+    document.getElementById('starRow').innerHTML = '';
+    document.getElementById('fortuneTitle').textContent = 'API 연결에 실패했어요';
+    document.getElementById('fortuneBody').textContent = 'API 키를 확인하거나 잠시 후 다시 시도해보세요. (' + e.message + ')';
+    document.getElementById('rerollBtn').disabled = false;
+  }
 }
 
-init();
+function startFortune() {
+  const name = document.getElementById('inputName').value.trim();
+  const birth = document.getElementById('inputBirth').value;
+
+  if (!name) { alert('이름을 입력해주세요!'); return; }
+  if (!window.GEMINI_API_KEY) { alert('config.js에 API 키가 설정되지 않았어요!'); return; }
+
+  userName = name;
+  userBirth = birth;
+  apiKey = window.GEMINI_API_KEY;
+
+  sessionStorage.setItem('fortune_name', name);
+  sessionStorage.setItem('fortune_birth', birth);
+
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('mainScreen').style.display = 'flex';
+  setDate();
+  loadFortune();
+}
+
+function reroll() { loadFortune(); }
+
+function goSetup() {
+  document.getElementById('mainScreen').style.display = 'none';
+  document.getElementById('setupScreen').style.display = 'flex';
+}
+
+buildBg();
+
+// Restore saved values
+const savedName = sessionStorage.getItem('fortune_name');
+const savedBirth = sessionStorage.getItem('fortune_birth');
+if (savedName) document.getElementById('inputName').value = savedName;
+if (savedBirth) document.getElementById('inputBirth').value = savedBirth;
+
+// Auto-start if name already saved
+if (savedName && window.GEMINI_API_KEY) {
+  startFortune();
+}
 </script>
 </body>
 </html>
