@@ -116,6 +116,12 @@
     padding: 0.5rem 1.5rem; font-size: 1rem;
     font-family: 'Noto Serif KR', serif; font-weight: 700; letter-spacing: 0.02em;
   }
+  .today-date {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--text); letter-spacing: 0.01em;
+    text-align: center;
+  }
 
   /* ── LOADING ── */
   .loading-card {
@@ -531,7 +537,7 @@
     </div>
   </div>
 
-  <button class="btn" id="rerollBtn" onclick="reroll()">⚙ 설정 변경</button>
+  <button class="btn" id="rerollBtn" onclick="reroll()">🎲 오늘의 운세 다시 뽑기</button>
 </div>
 
 <script>
@@ -578,7 +584,7 @@ function setDate() {
   const svgEls = document.querySelectorAll('#svgDate');
   svgEls.forEach(function(el) { el.textContent = dateStr; });
   const badge = document.getElementById('lunarDate');
-  if (badge) badge.textContent = '✨ ' + dateStr;
+  if (badge) badge.textContent = '📅 ' + dateStr;
 }
 
 function renderStars(n) {
@@ -633,10 +639,10 @@ function showCards(aiResult) {
   document.getElementById('loadingCard').style.display = 'none';
   document.getElementById('mainCard').classList.remove('hidden');
   document.getElementById('lottoCard').classList.remove('hidden');
+  const rb = document.getElementById('rerollBtn'); if (rb) rb.disabled = false;
   ['mc1','mc2','mc3','mc4'].forEach(function(id, i) {
     setTimeout(function() { document.getElementById(id).classList.remove('hidden'); }, i * 80 + 100);
   });
-  document.getElementById('rerollBtn').disabled = false;
 }
 
 function resetCards() {
@@ -644,7 +650,7 @@ function resetCards() {
   document.getElementById('lottoCard').classList.add('hidden');
   ['mc1','mc2','mc3','mc4'].forEach(function(id) { document.getElementById(id).classList.add('hidden'); });
   document.getElementById('loadingCard').style.display = 'block';
-  document.getElementById('rerollBtn').disabled = true;
+  const rb2 = document.getElementById('rerollBtn'); if (rb2) rb2.disabled = true;
 }
 
 async function fetchFortune() {
@@ -729,8 +735,7 @@ async function loadFortune() {
     else if (e.message.includes('400')) msg = '요청 형식 오류예요. 잠시 후 다시 시도해보세요.';
     else if (e.message.includes('403')) msg = 'API 키 권한이 없어요. 키를 확인해주세요.';
     document.getElementById('fortuneBody').textContent = msg;
-    document.getElementById('rerollBtn').disabled = false;
-  }
+    }
 }
 
 function startFortune() {
@@ -753,9 +758,12 @@ function startFortune() {
   loadFortune();
 }
 
-function reroll() { goSetup(); }
 
-function goSetup() {
+function reroll() {
+  sessionStorage.removeItem('fortune_name');
+  sessionStorage.removeItem('fortune_birth');
+  document.getElementById('inputName').value = '';
+  document.getElementById('inputBirth').value = '';
   document.getElementById('mainScreen').style.display = 'none';
   document.getElementById('setupScreen').style.display = 'flex';
 }
