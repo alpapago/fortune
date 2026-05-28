@@ -678,7 +678,10 @@ async function fetchFortune() {
   "lotto": [로또번호 6개 숫자 배열, 1~45 사이 중복없이]
 }`;
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+  // Read key fresh in case it loaded after init
+  const currentKey = apiKey || window.GEMINI_API_KEY || '';
+  if (!currentKey || currentKey === 'YOUR_API_KEY_HERE') throw new Error('API 키 없음');
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${currentKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -747,28 +750,18 @@ function goSetup() {
 
 buildBg();
 
-// Dynamically load config.js so key is guaranteed available
-function loadConfig() {
-  return new Promise((resolve) => {
-    const s = document.createElement('script');
-    s.src = 'config.js?v=' + Date.now();
-    s.onload = () => resolve(true);
-    s.onerror = () => resolve(false);
-    document.head.appendChild(s);
-  });
-}
-
-loadConfig().then(() => {
+// config.js loads after this script, so init runs on window load
+window.addEventListener('load', function() {
   const savedName = sessionStorage.getItem('fortune_name');
   const savedBirth = sessionStorage.getItem('fortune_birth');
   if (savedName) document.getElementById('inputName').value = savedName;
   if (savedBirth) document.getElementById('inputBirth').value = savedBirth;
 
-  // Auto-start if name already saved and key exists
   if (savedName && window.GEMINI_API_KEY && window.GEMINI_API_KEY !== 'YOUR_API_KEY_HERE') {
     startFortune();
   }
 });
 </script>
+<script src="config.js"></script>
 </body>
 </html>
