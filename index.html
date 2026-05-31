@@ -713,7 +713,9 @@ async function fetchFortune() {
   }
 
   const data = await res.json();
+  console.log(data);
   const raw = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) || '';
+  console.log(raw);
   const cleaned = raw.replace(/```json/g, '').replace(/```/g, '').trim();
   console.log(cleaned);
   return JSON.parse(cleaned);
